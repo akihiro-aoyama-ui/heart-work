@@ -259,7 +259,7 @@
 
     table {
       width: 100%;
-      min-width: 1320px;
+      min-width: 1280px;
       border-collapse: collapse;
       font-size: 13px;
     }
@@ -418,7 +418,7 @@
           <div class="table-actions">
             <div class="action-group">
               <button class="tool" type="button" id="runCheck">自動チェック</button>
-              <button class="tool" type="button" id="download">CSV出力</button>
+              <button class="tool" type="button" id="download">帳票を出力</button>
             </div>
             <div class="action-group">
               <button class="tool" type="button" id="finishAll">本日の確認完了</button>
@@ -428,18 +428,17 @@
             <table>
               <thead>
                 <tr>
-                  <th>配車名 ↕</th>
-                  <th>アクション</th>
+                  <th>稼働日 ↕</th>
                   <th>顧客</th>
                   <th>車両</th>
                   <th>予定ドライバー ↕</th>
                   <th>実績ドライバー ↕</th>
-                  <th>出勤</th>
-                  <th>消化金額 ↕</th>
-                  <th>CPM(稼働単価) ↕</th>
-                  <th>リーチ ↕</th>
-                  <th>予算 ↕</th>
-                  <th>結果 ↕</th>
+                  <th>出勤打刻</th>
+                  <th>照合結果</th>
+                  <th>月内稼働 ↕</th>
+                  <th>空き枠 ↕</th>
+                  <th>出力帳票</th>
+                  <th>操作</th>
                 </tr>
               </thead>
               <tbody id="rows"></tbody>
@@ -454,10 +453,10 @@
 
   <script>
     const records = [
-      { name: "5/11 サコス標準", customer: "サコス株式会社", car: "車両 12", plan: "佐藤 健", actual: "佐藤 健", attendance: "打刻あり", fixed: true, reach: 14991 },
-      { name: "5/11 東海リース", customer: "東海リース", car: "車両 18", plan: "鈴木 誠", actual: "鈴木 誠", attendance: "打刻なし", fixed: false, reach: 4448 },
-      { name: "5/11 三和建材", customer: "三和建材", car: "車両 23", plan: "田中 亮", actual: "高橋 直人", attendance: "打刻あり", fixed: false, reach: 9530 },
-      { name: "5/11 城南物流", customer: "城南物流", car: "車両 31", plan: "高橋 直人", actual: "高橋 直人", attendance: "打刻あり", fixed: true, reach: 6704 }
+      { date: "2026/05/11", customer: "サコス株式会社", car: "車両 12", plan: "佐藤 健", actual: "佐藤 健", attendance: "打刻あり", fixed: true, runDays: 23.4, openSlots: 0, reports: "顧客軸・車両軸" },
+      { date: "2026/05/11", customer: "東海リース", car: "車両 18", plan: "鈴木 誠", actual: "鈴木 誠", attendance: "打刻なし", fixed: false, runDays: 20.8, openSlots: 2, reports: "勤怠表" },
+      { date: "2026/05/11", customer: "三和建材", car: "車両 23", plan: "田中 亮", actual: "高橋 直人", attendance: "打刻あり", fixed: false, runDays: 22.1, openSlots: 1, reports: "顧客軸" },
+      { date: "2026/05/11", customer: "城南物流", car: "車両 31", plan: "高橋 直人", actual: "高橋 直人", attendance: "打刻あり", fixed: true, runDays: 21.0, openSlots: 2, reports: "週次経営" }
     ];
 
     let view = "dashboard";
@@ -504,21 +503,20 @@
         const [label, cls] = status(record);
         return `
           <tr>
-            <td><span class="name">${record.name}</span></td>
-            <td><button class="row-action" data-fix="${index}" type="button">修正して確定</button></td>
+            <td><span class="name">${record.date}</span></td>
             <td>${record.customer}</td>
             <td>${record.car}</td>
             <td>${record.plan}</td>
             <td>${record.actual}</td>
+            <td>${record.attendance}</td>
             <td><span class="pill ${cls}">${label}</span></td>
-            <td>¥${(2200 + index * 89).toLocaleString()}</td>
-            <td>¥${(144 + index * 93).toLocaleString()}</td>
-            <td>${record.reach.toLocaleString()}</td>
-            <td>配車セット予算...</td>
-            <td>${record.fixed ? "実績確定" : label}</td>
+            <td>${record.runDays.toFixed(1)}日</td>
+            <td>${record.openSlots}枠</td>
+            <td>${record.reports}</td>
+            <td><button class="row-action" data-fix="${index}" type="button">修正して確定</button></td>
           </tr>
         `;
-      }).join("") : `<tr><td colspan="12"><div class="empty">表示できるデータはありません</div></td></tr>`;
+      }).join("") : `<tr><td colspan="11"><div class="empty">表示できるデータはありません</div></td></tr>`;
 
       const issues = records.filter(record => issue(record));
       document.getElementById("planCount").textContent = records.length;
@@ -556,14 +554,16 @@
 
     document.getElementById("addRecord").addEventListener("click", () => {
       records.unshift({
-        name: "5/12 追加配車",
+        date: "2026/05/12",
         customer: "追加顧客",
         car: "車両 42",
         plan: "佐藤 健",
         actual: "未入力",
         attendance: "打刻なし",
         fixed: false,
-        reach: 3180
+        runDays: 18.5,
+        openSlots: 4,
+        reports: "未確定"
       });
       setView("schedule");
       toast("予定を追加しました");
@@ -574,7 +574,7 @@
       toast("自動チェックを実行しました");
     });
 
-    document.getElementById("download").addEventListener("click", () => toast("CSVを出力しました"));
+    document.getElementById("download").addEventListener("click", () => toast("顧客軸・車両軸・勤怠表を出力しました"));
 
     function finishAll() {
       records.forEach(record => {
