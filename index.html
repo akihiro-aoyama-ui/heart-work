@@ -7,14 +7,14 @@
   <style>
     :root {
       --bg: #f0f2f5;
-      --panel: #ffffff;
+      --panel: #fff;
       --ink: #1d2935;
-      --muted: #667685;
+      --muted: #647484;
       --line: #cfd8e3;
-      --line-soft: #e6ebf1;
+      --line-soft: #e7ecf2;
       --blue: #1877f2;
       --blue-soft: #e7f3ff;
-      --green: #14805e;
+      --green: #12805c;
       --red: #c93445;
       --amber: #a96800;
       --row: #f7f8fa;
@@ -32,44 +32,34 @@
       line-height: 1.45;
     }
 
-    button,
-    input,
-    select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
 
     .app {
-      display: grid;
-      grid-template-columns: 300px minmax(0, 1fr);
       min-height: 100vh;
+      display: grid;
+      grid-template-columns: 292px minmax(0, 1fr);
     }
 
     .sidebar {
       background: #fff;
       border-right: 1px solid var(--line);
       padding: 12px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
     }
 
-    .logo {
-      padding: 0 8px 10px;
+    .brand {
+      padding: 0 8px 12px;
       border-bottom: 1px solid var(--line-soft);
+      margin-bottom: 12px;
     }
 
-    .logo-mark {
+    .brand .mark {
       color: var(--blue);
       font-weight: 800;
-      font-size: 15px;
       margin-bottom: 6px;
     }
 
-    .logo h1 {
+    .brand h1 {
       margin: 0;
       font-size: 26px;
       line-height: 1.15;
@@ -82,8 +72,7 @@
     }
 
     .nav button {
-      min-height: 40px;
-      width: 100%;
+      min-height: 42px;
       border: 0;
       border-radius: 6px;
       background: transparent;
@@ -91,10 +80,10 @@
       grid-template-columns: 24px minmax(0, 1fr) auto;
       gap: 8px;
       align-items: center;
+      padding: 0 10px;
       color: var(--ink);
-      text-align: left;
-      padding: 0 9px;
       font-weight: 650;
+      text-align: left;
     }
 
     .nav button.active {
@@ -102,15 +91,9 @@
       color: #1264bf;
     }
 
-    .nav .ico {
-      width: 22px;
-      text-align: center;
-      color: #263746;
-    }
-
-    .nav .badge {
-      min-width: 20px;
-      height: 20px;
+    .badge {
+      min-width: 22px;
+      height: 22px;
       border-radius: 999px;
       display: grid;
       place-items: center;
@@ -123,22 +106,21 @@
     .workspace {
       min-width: 0;
       display: grid;
-      grid-template-rows: auto auto auto minmax(0, 1fr);
+      grid-template-rows: auto auto minmax(0, 1fr);
     }
 
-    .accountbar {
-      height: 58px;
+    .topbar {
+      min-height: 58px;
+      background: #f6f4fb;
+      border-bottom: 1px solid var(--line);
       display: grid;
-      grid-template-columns: 310px auto minmax(0, 1fr) auto;
+      grid-template-columns: 310px minmax(0, 1fr) auto;
       gap: 14px;
       align-items: center;
       padding: 8px 12px;
-      background: #f6f4fb;
-      border-bottom: 1px solid var(--line);
     }
 
     .selectbox,
-    .chip,
     .tool,
     .primary {
       min-height: 38px;
@@ -148,6 +130,7 @@
       color: var(--ink);
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       padding: 0 12px;
       font-weight: 650;
@@ -159,38 +142,17 @@
       overflow: hidden;
     }
 
-    .score {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--ink);
-      font-weight: 650;
-    }
-
-    .score-ring {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background:
-        radial-gradient(circle at center, #fff 55%, transparent 56%),
-        conic-gradient(var(--blue) 0 70%, #d6dde8 70% 100%);
-      color: #1d4ed8;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .top-status {
-      justify-self: end;
+    .status {
       color: #344250;
       font-size: 13px;
+      justify-self: end;
     }
 
     .top-actions {
       display: flex;
       gap: 8px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .primary {
@@ -199,34 +161,12 @@
       color: #fff;
     }
 
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 8px 12px;
-      background: #f3f6f9;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .tool-left,
-    .tool-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .tool.active {
-      background: #fff;
-      border-color: #9fb2c5;
-    }
-
     .notice {
       margin: 8px 12px;
       border-radius: 5px;
       background: #fff;
       border: 1px solid var(--line-soft);
-      min-height: 36px;
+      min-height: 38px;
       display: flex;
       align-items: center;
       padding: 0 12px;
@@ -236,56 +176,53 @@
 
     .content {
       min-width: 0;
+      min-height: 0;
       display: grid;
       grid-template-rows: auto minmax(0, 1fr);
       padding: 0 12px 12px;
       overflow: hidden;
     }
 
-    .columns {
+    .summary {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 8px;
     }
 
-    .column {
-      min-height: 76px;
+    .summary-card {
       background: #fff;
       border: 1px solid var(--line-soft);
       border-radius: 8px 8px 0 0;
       overflow: hidden;
     }
 
-    .column-head {
+    .summary-title {
       height: 42px;
+      border-bottom: 1px solid var(--line-soft);
       display: flex;
       align-items: center;
       gap: 8px;
       padding: 0 14px;
       font-size: 16px;
       font-weight: 750;
-      border-bottom: 1px solid var(--line-soft);
     }
 
-    .column-body {
+    .summary-body {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
       padding: 10px 12px;
     }
 
-    .mini-stat {
-      display: grid;
-      gap: 2px;
-    }
-
-    .mini-stat strong {
+    .mini strong {
+      display: block;
       font-size: 18px;
-      line-height: 1.1;
+      line-height: 1.15;
     }
 
-    .mini-stat span {
+    .mini span {
+      display: block;
       color: var(--muted);
       font-size: 12px;
     }
@@ -308,6 +245,13 @@
       background: #fff;
     }
 
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .table-scroll {
       min-height: 0;
       overflow: auto;
@@ -315,13 +259,12 @@
 
     table {
       width: 100%;
+      min-width: 1320px;
       border-collapse: collapse;
-      min-width: 1420px;
       font-size: 13px;
     }
 
-    th,
-    td {
+    th, td {
       border-right: 1px solid var(--line);
       border-bottom: 1px solid var(--line-soft);
       padding: 8px 10px;
@@ -336,18 +279,13 @@
       z-index: 1;
       background: #f6f8fb;
       color: #1f2c39;
-      font-weight: 800;
       font-size: 12px;
+      font-weight: 800;
       line-height: 1.2;
     }
 
-    tbody tr:nth-child(even) {
-      background: var(--row);
-    }
-
-    tbody tr:hover {
-      background: #eaf3ff;
-    }
+    tbody tr:nth-child(even) { background: var(--row); }
+    tbody tr:hover { background: #eaf3ff; }
 
     .name {
       color: #1264bf;
@@ -367,23 +305,9 @@
       font-weight: 750;
     }
 
-    .pill.ok {
-      border-color: #9fd6c0;
-      background: #e9f7f1;
-      color: var(--green);
-    }
-
-    .pill.err {
-      border-color: #f2a7b1;
-      background: #fff0f2;
-      color: var(--red);
-    }
-
-    .pill.warn {
-      border-color: #f4d08f;
-      background: #fff7df;
-      color: var(--amber);
-    }
+    .pill.ok { border-color: #9fd6c0; background: #e9f7f1; color: var(--green); }
+    .pill.err { border-color: #f2a7b1; background: #fff0f2; color: var(--red); }
+    .pill.warn { border-color: #f4d08f; background: #fff7df; color: var(--amber); }
 
     .row-action {
       min-height: 26px;
@@ -392,6 +316,12 @@
       background: #fff;
       color: var(--ink);
       font-size: 12px;
+      font-weight: 700;
+    }
+
+    .empty {
+      padding: 28px;
+      color: var(--muted);
       font-weight: 700;
     }
 
@@ -417,129 +347,81 @@
     }
 
     @media (max-width: 1050px) {
-      .app {
-        grid-template-columns: 1fr;
-      }
-
-      .sidebar {
-        border-right: 0;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .nav {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .accountbar {
-        grid-template-columns: 1fr;
-        height: auto;
-      }
-
-      .top-status,
-      .top-actions {
-        justify-self: start;
-      }
-
-      .columns {
-        grid-template-columns: 1fr;
-      }
+      .app { grid-template-columns: 1fr; }
+      .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
+      .nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .topbar { grid-template-columns: 1fr; }
+      .status { justify-self: start; }
+      .summary { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="app">
     <aside class="sidebar">
-      <div class="logo">
-        <div class="logo-mark">∞ HeartWork</div>
+      <div class="brand">
+        <div class="mark">∞ HeartWork</div>
         <h1>配車マネージャ</h1>
       </div>
       <nav class="nav">
-        <button type="button"><span class="ico">♢</span><span>お知らせ</span><span class="badge">8</span></button>
-        <button type="button"><span class="ico">◴</span><span>アカウント概要</span></button>
-        <button class="active" type="button"><span class="ico">▦</span><span>配車予定</span></button>
-        <button type="button"><span class="ico">▤</span><span>実績レポート</span></button>
-        <button type="button"><span class="ico">♙</span><span>ドライバー</span></button>
-        <button type="button"><span class="ico">⚙</span><span>設定</span></button>
-        <button type="button"><span class="ico">▣</span><span>請求と支払い</span></button>
-        <button type="button"><span class="ico">☰</span><span>すべてのツール</span></button>
+        <button class="active" type="button" data-view="dashboard"><span>▦</span><span>ダッシュボード</span><span class="badge" id="badgeIssues">2</span></button>
+        <button type="button" data-view="schedule"><span>＋</span><span>予定登録</span></button>
+        <button type="button" data-view="check"><span>✓</span><span>自動チェック</span></button>
+        <button type="button" data-view="report"><span>▤</span><span>帳票出力</span></button>
       </nav>
     </aside>
 
     <main class="workspace">
-      <header class="accountbar">
+      <header class="topbar">
         <div class="selectbox">
-          <span>HeartWork 配車管理</span>
+          <span id="viewTitle">ダッシュボード</span>
           <span>▼</span>
         </div>
-        <div class="score">
-          <div class="score-ring">70</div>
-          <span>運用スコア</span>
-          <span>▼</span>
-        </div>
-        <div class="top-status">更新済み: 数秒前</div>
+        <div class="status" id="statusText">更新済み: 数秒前</div>
         <div class="top-actions">
-          <button class="tool" type="button" id="refresh">↻</button>
-          <button class="tool" type="button" id="discard">下書きを破棄する</button>
-          <button class="primary" type="button" id="publish">確認して確定(3)</button>
-          <button class="tool" type="button">…</button>
+          <button class="tool" type="button" id="addRecord">＋ 予定を追加</button>
+          <button class="primary" type="button" id="publish">確認して確定(2)</button>
         </div>
       </header>
 
-      <section class="toolbar">
-        <div class="tool-left">
-          <button class="tool active" type="button">配車予定</button>
-          <button class="tool" type="button">アクティブな実績</button>
-          <button class="tool" type="button">確認済み</button>
-          <button class="tool" type="button">＋ もっと見る</button>
-        </div>
-        <div class="tool-right">
-          <button class="tool" type="button">ビューを作成</button>
-          <button class="tool" type="button">☷</button>
-        </div>
-      </section>
-
-      <div class="notice">配車実績、出勤記録、予定差異を自動照合しています</div>
+      <div class="notice" id="notice">配車実績、出勤記録、予定差異を自動照合しています</div>
 
       <section class="content">
-        <div class="columns">
-          <div class="column">
-            <div class="column-head">▦ 予定</div>
-            <div class="column-body">
-              <div class="mini-stat"><strong id="planCount">4</strong><span>登録済み</span></div>
-              <div class="mini-stat"><strong>23日</strong><span>稼働基準</span></div>
-              <div class="mini-stat"><strong>21.8</strong><span>月末見込</span></div>
+        <div class="summary">
+          <div class="summary-card">
+            <div class="summary-title">▦ 予定</div>
+            <div class="summary-body">
+              <div class="mini"><strong id="planCount">4</strong><span>登録済み</span></div>
+              <div class="mini"><strong>23日</strong><span>稼働基準</span></div>
+              <div class="mini"><strong>21.8</strong><span>月末見込</span></div>
             </div>
           </div>
-          <div class="column">
-            <div class="column-head">▤ 実績</div>
-            <div class="column-body">
-              <div class="mini-stat"><strong id="fixedCount">2</strong><span>確定</span></div>
-              <div class="mini-stat"><strong id="inputCount">4</strong><span>入力済み</span></div>
-              <div class="mini-stat"><strong>5分</strong><span>確認時間</span></div>
+          <div class="summary-card">
+            <div class="summary-title">▤ 実績</div>
+            <div class="summary-body">
+              <div class="mini"><strong id="fixedCount">2</strong><span>確定</span></div>
+              <div class="mini"><strong id="inputCount">4</strong><span>入力済み</span></div>
+              <div class="mini"><strong>5分</strong><span>確認時間</span></div>
             </div>
           </div>
-          <div class="column">
-            <div class="column-head">□ 自動チェック</div>
-            <div class="column-body">
-              <div class="mini-stat"><strong id="issueCount">2</strong><span>要確認</span></div>
-              <div class="mini-stat"><strong>18:00</strong><span>自動実行</span></div>
-              <div class="mini-stat"><strong>4</strong><span>帳票</span></div>
+          <div class="summary-card">
+            <div class="summary-title">✓ 自動チェック</div>
+            <div class="summary-body">
+              <div class="mini"><strong id="issueCount">2</strong><span>要確認</span></div>
+              <div class="mini"><strong>18:00</strong><span>自動実行</span></div>
+              <div class="mini"><strong>4</strong><span>帳票</span></div>
             </div>
           </div>
         </div>
 
         <div class="table-shell">
           <div class="table-actions">
-            <div class="tool-left">
-              <button class="tool" type="button" id="addRecord">＋ 予定を追加</button>
+            <div class="action-group">
               <button class="tool" type="button" id="runCheck">自動チェック</button>
-              <button class="tool" type="button">その他 ▼</button>
+              <button class="tool" type="button" id="download">CSV出力</button>
             </div>
-            <div class="tool-right">
-              <button class="tool" type="button">列: 配車運用 ▼</button>
-              <button class="tool" type="button">内訳 ▼</button>
-              <button class="tool" type="button">ダウンロード</button>
-              <button class="tool" type="button">2026/05/06 - 2026/05/08 ▼</button>
+            <div class="action-group">
+              <button class="tool" type="button" id="finishAll">本日の確認完了</button>
             </div>
           </div>
           <div class="table-scroll">
@@ -578,6 +460,15 @@
       { name: "5/11 城南物流", customer: "城南物流", car: "車両 31", plan: "高橋 直人", actual: "高橋 直人", attendance: "打刻あり", fixed: true, reach: 6704 }
     ];
 
+    let view = "dashboard";
+
+    const viewConfig = {
+      dashboard: ["ダッシュボード", "配車実績、出勤記録、予定差異を自動照合しています"],
+      schedule: ["予定登録", "追加予定と未入力の配車を表示しています"],
+      check: ["自動チェック", "打刻漏れと予定差異だけを表示しています"],
+      report: ["帳票出力", "確定済みの実績と帳票出力対象を表示しています"]
+    };
+
     function issue(record) {
       if (record.fixed) return null;
       if (record.attendance === "打刻なし") return "出勤打刻なし";
@@ -592,6 +483,13 @@
       return [i, "err"];
     }
 
+    function visibleRecords() {
+      if (view === "schedule") return records.filter(record => !record.fixed || record.actual === "未入力");
+      if (view === "check") return records.filter(record => issue(record));
+      if (view === "report") return records.filter(record => record.fixed);
+      return records;
+    }
+
     function toast(text) {
       const el = document.getElementById("toast");
       el.textContent = text;
@@ -600,12 +498,14 @@
     }
 
     function render() {
-      document.getElementById("rows").innerHTML = records.map((record, index) => {
+      const list = visibleRecords();
+      document.getElementById("rows").innerHTML = list.length ? list.map(record => {
+        const index = records.indexOf(record);
         const [label, cls] = status(record);
         return `
           <tr>
             <td><span class="name">${record.name}</span></td>
-            <td><button class="row-action" data-fix="${index}" type="button">推奨事項2件</button></td>
+            <td><button class="row-action" data-fix="${index}" type="button">修正して確定</button></td>
             <td>${record.customer}</td>
             <td>${record.car}</td>
             <td>${record.plan}</td>
@@ -618,14 +518,17 @@
             <td>${record.fixed ? "実績確定" : label}</td>
           </tr>
         `;
-      }).join("");
+      }).join("") : `<tr><td colspan="12"><div class="empty">表示できるデータはありません</div></td></tr>`;
 
       const issues = records.filter(record => issue(record));
       document.getElementById("planCount").textContent = records.length;
-      document.getElementById("inputCount").textContent = records.length;
+      document.getElementById("inputCount").textContent = records.filter(record => record.actual !== "未入力").length;
       document.getElementById("fixedCount").textContent = records.filter(record => record.fixed).length;
       document.getElementById("issueCount").textContent = issues.length;
+      document.getElementById("badgeIssues").textContent = issues.length;
       document.getElementById("publish").textContent = `確認して確定(${issues.length})`;
+      document.getElementById("viewTitle").textContent = viewConfig[view][0];
+      document.getElementById("notice").textContent = viewConfig[view][1];
 
       document.querySelectorAll("[data-fix]").forEach(button => {
         button.addEventListener("click", () => {
@@ -639,19 +542,18 @@
       });
     }
 
-    document.getElementById("publish").addEventListener("click", () => {
-      records.forEach(record => {
-        record.actual = record.plan;
-        record.attendance = "打刻あり";
-        record.fixed = true;
+    function setView(nextView) {
+      view = nextView;
+      document.querySelectorAll("[data-view]").forEach(button => {
+        button.classList.toggle("active", button.dataset.view === view);
       });
       render();
-      toast("すべて確定しました");
+    }
+
+    document.querySelectorAll("[data-view]").forEach(button => {
+      button.addEventListener("click", () => setView(button.dataset.view));
     });
 
-    document.getElementById("refresh").addEventListener("click", () => toast("最新化しました"));
-    document.getElementById("discard").addEventListener("click", () => toast("下書きを破棄しました"));
-    document.getElementById("runCheck").addEventListener("click", () => toast("自動チェックを実行しました"));
     document.getElementById("addRecord").addEventListener("click", () => {
       records.unshift({
         name: "5/12 追加配車",
@@ -663,9 +565,29 @@
         fixed: false,
         reach: 3180
       });
-      render();
+      setView("schedule");
       toast("予定を追加しました");
     });
+
+    document.getElementById("runCheck").addEventListener("click", () => {
+      setView("check");
+      toast("自動チェックを実行しました");
+    });
+
+    document.getElementById("download").addEventListener("click", () => toast("CSVを出力しました"));
+
+    function finishAll() {
+      records.forEach(record => {
+        record.actual = record.plan;
+        record.attendance = "打刻あり";
+        record.fixed = true;
+      });
+      render();
+      toast("すべて確定しました");
+    }
+
+    document.getElementById("publish").addEventListener("click", finishAll);
+    document.getElementById("finishAll").addEventListener("click", finishAll);
 
     render();
   </script>
