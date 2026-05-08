@@ -3,34 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ハートワーク 配車・勤怠管理</title>
+  <title>ハートワーク 配車ワークスペース</title>
   <style>
     :root {
-      --ink: #142033;
-      --muted: #667085;
-      --line: #d9e2ef;
-      --bg: #f3f6fa;
-      --panel: #fff;
-      --blue: #2563eb;
-      --green: #15935f;
-      --red: #d53345;
-      --yellow: #b7791f;
-      --cyan: #0e9fba;
-      --soft-blue: #eaf2ff;
-      --soft-green: #e9f8f1;
+      --ink: #162033;
+      --sub: #657186;
+      --line: #dbe4ef;
+      --bg: #eef3f8;
+      --panel: #ffffff;
+      --blue: #2f6df6;
+      --green: #15946b;
+      --red: #d83a4a;
+      --amber: #c77814;
+      --cyan: #0f9bb7;
+      --violet: #7458d9;
+      --soft-blue: #eaf1ff;
+      --soft-green: #e8f7f0;
       --soft-red: #fff0f2;
-      --soft-yellow: #fff7d6;
-      --shadow: 0 14px 34px rgba(31, 44, 64, .09);
+      --soft-amber: #fff4dc;
+      --shadow: 0 18px 46px rgba(31, 45, 68, .1);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      background: var(--bg);
+      min-height: 100vh;
       color: var(--ink);
+      background:
+        linear-gradient(180deg, #f9fbfd 0, var(--bg) 320px);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.55;
+      line-height: 1.5;
     }
 
     button,
@@ -39,164 +42,139 @@
       font: inherit;
     }
 
-    .shell {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-    }
-
-    .side {
-      background: #101827;
-      color: #fff;
-      padding: 22px 18px;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .brand {
-      display: grid;
-      gap: 2px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-    }
-
-    .brand strong {
-      font-size: 19px;
-      letter-spacing: 0;
-    }
-
-    .brand span {
-      font-size: 12px;
-      color: rgba(255,255,255,.66);
-    }
-
-    .nav {
-      display: grid;
-      gap: 8px;
-    }
-
-    .nav button {
-      width: 100%;
-      border: 0;
-      border-radius: 8px;
-      min-height: 43px;
-      padding: 0 12px;
-      background: transparent;
-      color: rgba(255,255,255,.78);
-      text-align: left;
-      font-weight: 800;
+    button {
       cursor: pointer;
     }
 
-    .nav button.active {
-      background: #fff;
-      color: var(--ink);
+    .app {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 18px;
     }
 
-    .side-card {
-      margin-top: auto;
-      border-radius: 8px;
-      background: rgba(255,255,255,.08);
-      padding: 13px;
-      border: 1px solid rgba(255,255,255,.12);
-    }
-
-    .side-card strong {
-      display: block;
-      font-size: 25px;
-      line-height: 1.1;
-    }
-
-    .side-card span {
-      display: block;
-      font-size: 12px;
-      color: rgba(255,255,255,.68);
-      margin-top: 4px;
-    }
-
-    main {
-      padding: 22px;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .top {
+      min-height: 70px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
       gap: 16px;
-      margin-bottom: 16px;
+      align-items: center;
     }
 
-    h1 {
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, #1c704f 0 48%, #31b37b 48% 100%);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(21, 148, 107, .24);
+    }
+
+    .brand h1 {
       margin: 0;
-      font-size: 26px;
-      line-height: 1.25;
+      font-size: 25px;
+      line-height: 1.18;
       letter-spacing: 0;
     }
 
-    .date-chip {
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--sub);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chip {
+      min-height: 38px;
       display: inline-flex;
       align-items: center;
-      min-height: 38px;
+      gap: 7px;
+      padding: 0 13px;
       border-radius: 999px;
-      padding: 0 14px;
       background: #fff;
       border: 1px solid var(--line);
-      color: var(--muted);
+      color: var(--sub);
       font-size: 13px;
       font-weight: 800;
       white-space: nowrap;
     }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
+    .btn {
+      min-height: 40px;
+      border: 0;
+      border-radius: 8px;
+      padding: 0 14px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 900;
+      box-shadow: 0 10px 18px rgba(47, 109, 246, .2);
     }
 
-    .stat {
-      background: #fff;
+    .btn.green {
+      background: var(--green);
+      box-shadow: 0 10px 18px rgba(21, 148, 107, .18);
+    }
+
+    .btn.dark {
+      background: var(--ink);
+      box-shadow: 0 10px 18px rgba(22, 32, 51, .18);
+    }
+
+    .nav {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin: 16px 0;
+    }
+
+    .nav button {
       border: 1px solid var(--line);
       border-radius: 8px;
-      box-shadow: var(--shadow);
-      padding: 16px;
-      min-height: 104px;
+      min-height: 54px;
+      background: rgba(255,255,255,.72);
+      color: var(--sub);
+      font-weight: 900;
+      box-shadow: 0 10px 24px rgba(31, 45, 68, .05);
     }
 
-    .stat span {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 800;
+    .nav button.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff;
     }
 
-    .stat strong {
-      display: block;
-      margin-top: 8px;
-      font-size: 30px;
-      line-height: 1.1;
-    }
-
-    .stat small {
-      display: block;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .grid {
+    .workbench {
       display: grid;
-      grid-template-columns: 360px minmax(0, 1fr);
+      grid-template-columns: 310px minmax(0, 1fr) 360px;
       gap: 16px;
       align-items: start;
     }
 
+    .stack {
+      display: grid;
+      gap: 16px;
+    }
+
     .panel {
-      background: var(--panel);
+      background: rgba(255,255,255,.92);
       border: 1px solid var(--line);
       border-radius: 8px;
       box-shadow: var(--shadow);
@@ -205,64 +183,253 @@
 
     .panel-head {
       min-height: 54px;
-      padding: 13px 15px;
-      border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      background: #fbfcfe;
+      gap: 10px;
+      padding: 13px 15px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(250,252,255,.88);
     }
 
     .panel-title {
       font-size: 15px;
-      font-weight: 900;
+      font-weight: 950;
     }
 
     .panel-body {
       padding: 15px;
     }
 
-    .form {
+    .metric-grid {
       display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
+      margin-bottom: 16px;
     }
 
-    .field {
-      display: grid;
-      gap: 6px;
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 15px;
+      background: #fff;
+      min-height: 112px;
+      position: relative;
+      overflow: hidden;
     }
 
-    label {
-      color: var(--muted);
+    .metric::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: var(--blue);
+    }
+
+    .metric.green::before { background: var(--green); }
+    .metric.red::before { background: var(--red); }
+    .metric.amber::before { background: var(--amber); }
+
+    .metric span {
+      display: block;
+      color: var(--sub);
       font-size: 12px;
       font-weight: 900;
     }
 
-    input,
-    select {
+    .metric strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 31px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .metric small {
+      display: block;
+      margin-top: 9px;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .task-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .task {
       width: 100%;
-      height: 42px;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 66px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 0 11px;
+      background: #fff;
+      padding: 10px;
+      text-align: left;
+    }
+
+    .task.active {
+      border-color: #aebff8;
+      background: var(--soft-blue);
+    }
+
+    .dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 950;
+      background: var(--blue);
+    }
+
+    .dot.green { background: var(--green); }
+    .dot.red { background: var(--red); }
+    .dot.amber { background: var(--amber); }
+    .dot.cyan { background: var(--cyan); }
+
+    .task strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .task span {
+      display: block;
+      margin-top: 3px;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .count {
+      min-width: 32px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: #f2f5fa;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .board {
+      display: grid;
+      gap: 12px;
+    }
+
+    .route-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    .route-card:hover {
+      transform: translateY(-2px);
+      border-color: #b9c8da;
+      box-shadow: 0 12px 28px rgba(31, 45, 68, .1);
+    }
+
+    .route-main {
+      display: grid;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .route-title {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .route-title strong {
+      font-size: 17px;
+      line-height: 1.3;
+    }
+
+    .route-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mini {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 0 10px;
+      background: #f3f6fb;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .mini.ok { background: var(--soft-green); color: #117049; }
+    .mini.err { background: var(--soft-red); color: #aa2131; }
+    .mini.warn { background: var(--soft-amber); color: #805000; }
+    .mini.info { background: var(--soft-blue); color: #1c55b3; }
+
+    .route-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .ghost {
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 12px;
       background: #fff;
       color: var(--ink);
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 8px;
-      min-height: 42px;
-      padding: 0 14px;
-      background: var(--blue);
-      color: #fff;
       font-weight: 900;
-      cursor: pointer;
     }
 
-    .btn.green { background: var(--green); }
-    .btn.dark { background: var(--ink); }
+    .sheet-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfe;
+      overflow-x: auto;
+    }
+
+    .sheet-tab {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: #eef3f8;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .sheet-tab.active {
+      background: var(--ink);
+      color: #fff;
+    }
 
     .table-wrap {
       overflow-x: auto;
@@ -276,80 +443,109 @@
 
     th,
     td {
-      padding: 11px 12px;
+      padding: 12px;
       border-bottom: 1px solid var(--line);
       text-align: left;
       white-space: nowrap;
+      vertical-align: middle;
     }
 
     th {
-      color: var(--muted);
       background: #f8fafc;
+      color: var(--sub);
       font-size: 12px;
+      font-weight: 950;
     }
 
-    .tag {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      min-width: 76px;
-      min-height: 24px;
-      border-radius: 999px;
-      padding: 2px 9px;
+    .form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label {
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      padding: 0 11px;
+    }
+
+    .phone {
+      border: 8px solid #182033;
+      border-radius: 28px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 18px 34px rgba(24, 32, 51, .18);
+    }
+
+    .phone-bar {
+      height: 34px;
+      display: grid;
+      place-items: center;
+      background: #182033;
+      color: #fff;
       font-size: 12px;
       font-weight: 900;
     }
 
-    .tag.ok { background: var(--soft-green); color: #137148; }
-    .tag.warn { background: var(--soft-yellow); color: #815300; }
-    .tag.err { background: var(--soft-red); color: #a91e2d; }
-    .tag.info { background: var(--soft-blue); color: #1b52b2; }
-
-    .view { display: none; }
-    .view.active { display: block; }
-
-    .split {
+    .phone-screen {
+      padding: 14px;
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
-      gap: 16px;
+      gap: 12px;
+      background: linear-gradient(180deg, #fbfcff, #f2f6fb);
     }
 
-    .issue-list {
+    .check-list {
       display: grid;
       gap: 10px;
     }
 
-    .issue {
+    .check {
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 13px;
+      padding: 12px;
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
       background: #fff;
     }
 
-    .issue.err {
-      border-color: #f0b7bf;
+    .check.err {
       background: var(--soft-red);
+      border-color: #efb6bf;
     }
 
-    .issue.ok {
-      border-color: #b8dfc9;
+    .check.ok {
       background: var(--soft-green);
+      border-color: #b8dfca;
     }
 
-    .issue strong {
+    .check strong {
       display: block;
-      font-size: 14px;
+      font-size: 13px;
     }
 
-    .issue span {
+    .check span {
       display: block;
       margin-top: 3px;
-      color: var(--muted);
+      color: var(--sub);
       font-size: 12px;
+      font-weight: 700;
     }
 
     .bars {
@@ -357,83 +553,63 @@
       gap: 12px;
     }
 
-    .bar-row {
+    .bar {
       display: grid;
-      grid-template-columns: 90px minmax(0, 1fr) 56px;
-      align-items: center;
+      grid-template-columns: 74px minmax(0, 1fr) 48px;
       gap: 10px;
-      font-size: 13px;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 900;
     }
 
-    .bar-bg {
-      height: 13px;
-      background: #e8edf5;
+    .bar-track {
+      height: 12px;
+      background: #e5ecf5;
       border-radius: 999px;
       overflow: hidden;
     }
 
     .bar-fill {
       height: 100%;
-      border-radius: inherit;
       background: var(--blue);
+      border-radius: inherit;
     }
 
     .report-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
     }
 
     .report {
+      min-height: 92px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      min-height: 148px;
-      padding: 14px;
       background: #fff;
+      padding: 12px;
       display: grid;
       align-content: space-between;
     }
 
     .report strong {
-      font-size: 16px;
+      font-size: 14px;
+      line-height: 1.35;
     }
 
-    .phone {
-      max-width: 360px;
-      margin: 0 auto;
-      border: 10px solid #121826;
-      border-radius: 28px;
-      background: #fff;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-
-    .phone-head {
-      background: #121826;
-      color: #fff;
-      padding: 6px 12px 12px;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .phone-body {
-      padding: 14px;
-      display: grid;
-      gap: 11px;
-    }
+    .view { display: none; }
+    .view.active { display: grid; gap: 16px; }
 
     .toast {
       position: fixed;
-      right: 20px;
-      bottom: 20px;
-      background: var(--ink);
+      right: 18px;
+      bottom: 18px;
+      background: #162033;
       color: #fff;
       border-radius: 8px;
       padding: 12px 14px;
+      font-weight: 950;
       box-shadow: var(--shadow);
-      font-weight: 900;
-      transform: translateY(20px);
+      transform: translateY(18px);
       opacity: 0;
       pointer-events: none;
       transition: .18s ease;
@@ -444,95 +620,149 @@
       opacity: 1;
     }
 
-    @media (max-width: 980px) {
-      .shell {
+    @media (max-width: 1180px) {
+      .workbench {
         grid-template-columns: 1fr;
       }
 
-      .side {
-        position: static;
-        height: auto;
-      }
-
-      .stats,
-      .grid,
-      .split,
-      .report-grid {
-        grid-template-columns: 1fr;
+      .metric-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (max-width: 640px) {
-      main {
-        padding: 14px;
+    @media (max-width: 720px) {
+      .app {
+        padding: 12px;
       }
 
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
+      .top {
+        grid-template-columns: 1fr;
       }
 
-      h1 {
-        font-size: 22px;
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .nav,
+      .metric-grid,
+      .report-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .route-card {
+        grid-template-columns: 1fr;
+      }
+
+      .route-actions {
+        justify-content: flex-start;
       }
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <aside class="side">
+  <div class="app">
+    <header class="top">
       <div class="brand">
-        <strong>配車・勤怠管理</strong>
-        <span>ハートワークコーポレーション様</span>
+        <div class="mark">H</div>
+        <div>
+          <h1>配車ワークスペース</h1>
+          <p>ハートワークコーポレーション様</p>
+        </div>
       </div>
-      <nav class="nav">
-        <button class="active" type="button" data-view="dashboard">ダッシュボード</button>
-        <button type="button" data-view="schedule">配車予定</button>
-        <button type="button" data-view="mobile">現場入力</button>
-        <button type="button" data-view="check">不一致チェック</button>
-        <button type="button" data-view="report">帳票出力</button>
-      </nav>
-      <div class="side-card">
-        <strong id="sideScore">21.8日</strong>
-        <span>今月の平均稼働見込み</span>
+      <div class="top-actions">
+        <span class="chip">2026年5月11日 月曜日</span>
+        <button class="btn green" type="button" id="quickDone">本日の確認完了</button>
       </div>
-    </aside>
+    </header>
 
-    <main>
-      <div class="topbar">
-        <h1 id="pageTitle">本日の配車状況</h1>
-        <div class="date-chip">2026年5月11日 月曜日</div>
-      </div>
+    <nav class="nav">
+      <button class="active" type="button" data-view="today">今日の配車</button>
+      <button type="button" data-view="schedule">予定登録</button>
+      <button type="button" data-view="field">現場入力</button>
+      <button type="button" data-view="check">自動チェック</button>
+      <button type="button" data-view="report">帳票</button>
+    </nav>
 
-      <div class="stats">
-        <div class="stat">
-          <span>本日の配車</span>
-          <strong id="todayCount">4件</strong>
-          <small>予定登録済み</small>
-        </div>
-        <div class="stat">
-          <span>実績確定</span>
-          <strong id="fixedCount">2件</strong>
-          <small>本社確認済み</small>
-        </div>
-        <div class="stat">
-          <span>要確認</span>
-          <strong id="issueCount">2件</strong>
-          <small>GAS自動検出</small>
-        </div>
-        <div class="stat">
-          <span>23日到達車両</span>
-          <strong>1台</strong>
-          <small>月末着地予測</small>
-        </div>
+    <div class="metric-grid">
+      <div class="metric">
+        <span>本日の配車</span>
+        <strong id="mToday">4件</strong>
+        <small>予定から自動表示</small>
       </div>
+      <div class="metric green">
+        <span>確定済み</span>
+        <strong id="mFixed">2件</strong>
+        <small>本社確認済み</small>
+      </div>
+      <div class="metric red">
+        <span>要確認</span>
+        <strong id="mIssue">2件</strong>
+        <small>GASで検出</small>
+      </div>
+      <div class="metric amber">
+        <span>月末見込み</span>
+        <strong>21.8日</strong>
+        <small>平均稼働日数</small>
+      </div>
+    </div>
 
-      <section id="dashboard" class="view active">
-        <div class="split">
+    <div class="workbench">
+      <aside class="stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">今日やること</div>
+            <span class="mini info" id="taskCount">2件</span>
+          </div>
+          <div class="panel-body">
+            <div class="task-list">
+              <button class="task active" type="button" data-view-jump="today">
+                <span class="dot">1</span>
+                <span><strong>配車を確認</strong><span>予定と実績を一覧で見る</span></span>
+                <span class="count">4</span>
+              </button>
+              <button class="task" type="button" data-view-jump="check">
+                <span class="dot red">2</span>
+                <span><strong>不一致を直す</strong><span>打刻漏れ・予定差異だけ確認</span></span>
+                <span class="count" id="taskIssue">2</span>
+              </button>
+              <button class="task" type="button" data-view-jump="report">
+                <span class="dot green">3</span>
+                <span><strong>帳票を出す</strong><span>PDFをドライブへ保存</span></span>
+                <span class="count">4</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">23日稼働</div>
+            <span class="mini warn">月末予測</span>
+          </div>
+          <div class="panel-body">
+            <div class="bars" id="bars"></div>
+          </div>
+        </section>
+      </aside>
+
+      <main class="stack">
+        <section class="view active" id="today">
           <div class="panel">
             <div class="panel-head">
-              <div class="panel-title">配車実績シート</div>
-              <span class="tag info">自動更新</span>
+              <div class="panel-title">配車ボード</div>
+              <button class="btn dark" type="button" id="refreshBoard">最新化</button>
+            </div>
+            <div class="panel-body">
+              <div class="board" id="routeCards"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="sheet-tabs">
+              <button class="sheet-tab active" type="button">配車実績</button>
+              <button class="sheet-tab" type="button">顧客軸</button>
+              <button class="sheet-tab" type="button">車両軸</button>
+              <button class="sheet-tab" type="button">出勤簿</button>
             </div>
             <div class="table-wrap">
               <table>
@@ -546,30 +776,24 @@
                     <th>状態</th>
                   </tr>
                 </thead>
-                <tbody id="dashboardRows"></tbody>
+                <tbody id="rowsToday"></tbody>
               </table>
             </div>
           </div>
-          <div class="panel">
-            <div class="panel-head">
-              <div class="panel-title">稼働見込み</div>
-              <span class="tag info">23日基準</span>
-            </div>
-            <div class="panel-body">
-              <div class="bars" id="dashBars"></div>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="schedule" class="view">
-        <div class="grid">
+        <section class="view" id="schedule">
           <div class="panel">
             <div class="panel-head">
               <div class="panel-title">翌日予定登録</div>
+              <span class="mini info">マネージャー入力</span>
             </div>
             <div class="panel-body">
               <div class="form">
+                <div class="field">
+                  <label for="date">稼働日</label>
+                  <input id="date" type="date" value="2026-05-12">
+                </div>
                 <div class="field">
                   <label for="customer">顧客</label>
                   <select id="customer">
@@ -597,70 +821,17 @@
                     <option>高橋 直人</option>
                   </select>
                 </div>
-                <div class="field">
-                  <label for="date">稼働日</label>
-                  <input id="date" type="date" value="2026-05-12">
-                </div>
-                <button class="btn" type="button" id="addSchedule">予定を登録</button>
+                <button class="btn" type="button" id="addSchedule">予定を追加</button>
               </div>
             </div>
           </div>
-          <div class="panel">
-            <div class="panel-head">
-              <div class="panel-title">配車予定</div>
-              <span class="tag ok">予定確定</span>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>日付</th>
-                    <th>顧客</th>
-                    <th>車両</th>
-                    <th>ドライバー</th>
-                    <th>状態</th>
-                  </tr>
-                </thead>
-                <tbody id="scheduleRows"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="mobile" class="view">
-        <div class="split">
-          <div class="phone">
-            <div class="phone-head">現場入力</div>
-            <div class="phone-body">
-              <div class="field">
-                <label for="target">対象予定</label>
-                <select id="target"></select>
-              </div>
-              <div class="field">
-                <label for="actualDriver">実績ドライバー</label>
-                <select id="actualDriver">
-                  <option>佐藤 健</option>
-                  <option>鈴木 誠</option>
-                  <option>田中 亮</option>
-                  <option>高橋 直人</option>
-                  <option>未入力</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="attendance">出勤打刻</label>
-                <select id="attendance">
-                  <option>打刻あり</option>
-                  <option>打刻なし</option>
-                </select>
-              </div>
-              <button class="btn green" type="button" id="saveActual">送信</button>
-            </div>
-          </div>
+        <section class="view" id="field">
           <div class="panel">
             <div class="panel-head">
-              <div class="panel-title">実績入力履歴</div>
-              <span class="tag info">フォーム連携</span>
+              <div class="panel-title">現場入力履歴</div>
+              <span class="mini ok">スマホ送信</span>
             </div>
             <div class="table-wrap">
               <table>
@@ -668,74 +839,88 @@
                   <tr>
                     <th>顧客</th>
                     <th>車両</th>
-                    <th>予定</th>
                     <th>実績</th>
                     <th>出勤</th>
                     <th>状態</th>
                   </tr>
                 </thead>
-                <tbody id="actualRows"></tbody>
+                <tbody id="rowsField"></tbody>
               </table>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="check" class="view">
-        <div class="split">
+        <section class="view" id="check">
           <div class="panel">
             <div class="panel-head">
-              <div class="panel-title">GAS照合結果</div>
+              <div class="panel-title">自動チェック</div>
               <button class="btn dark" type="button" id="runCheck">再チェック</button>
             </div>
             <div class="panel-body">
-              <div class="issue-list" id="issueRows"></div>
+              <div class="check-list" id="checkRows"></div>
             </div>
           </div>
+        </section>
+
+        <section class="view" id="report">
           <div class="panel">
             <div class="panel-head">
-              <div class="panel-title">修正処理</div>
+              <div class="panel-title">帳票出力</div>
+              <button class="btn" type="button" id="saveReport">ドライブへ保存</button>
             </div>
             <div class="panel-body">
-              <div class="form">
-                <button class="btn green" type="button" id="fixOne">先頭の不備を修正済みにする</button>
-                <button class="btn" type="button" id="fixAll">全件を確認済みにする</button>
+              <div class="report-grid">
+                <div class="report"><strong>顧客軸配車表</strong><span class="mini info">PDF</span></div>
+                <div class="report"><strong>車両軸配車表</strong><span class="mini info">PDF</span></div>
+                <div class="report"><strong>勤怠表レポート</strong><span class="mini info">PDF</span></div>
+                <div class="report"><strong>週次経営レポート</strong><span class="mini info">PDF</span></div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      <section id="report" class="view">
-        <div class="report-grid">
-          <div class="report">
-            <strong>顧客軸配車表</strong>
-            <span class="tag info">PDF作成</span>
+      <aside class="stack">
+        <section class="phone">
+          <div class="phone-bar">ドライバー入力</div>
+          <div class="phone-screen">
+            <div class="field">
+              <label for="target">対象予定</label>
+              <select id="target"></select>
+            </div>
+            <div class="field">
+              <label for="actual">実績ドライバー</label>
+              <select id="actual">
+                <option>佐藤 健</option>
+                <option>鈴木 誠</option>
+                <option>田中 亮</option>
+                <option>高橋 直人</option>
+                <option>未入力</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="attendance">出勤打刻</label>
+              <select id="attendance">
+                <option>打刻あり</option>
+                <option>打刻なし</option>
+              </select>
+            </div>
+            <button class="btn green" type="button" id="saveActual">送信</button>
           </div>
-          <div class="report">
-            <strong>車両軸配車表</strong>
-            <span class="tag info">PDF作成</span>
-          </div>
-          <div class="report">
-            <strong>勤怠表レポート</strong>
-            <span class="tag info">PDF作成</span>
-          </div>
-          <div class="report">
-            <strong>週次経営レポート</strong>
-            <span class="tag info">PDF作成</span>
-          </div>
-        </div>
-        <div class="panel" style="margin-top:16px">
+        </section>
+
+        <section class="panel">
           <div class="panel-head">
-            <div class="panel-title">週次経営レポート</div>
-            <button class="btn" type="button" id="makeReport">Googleドライブへ保存</button>
+            <div class="panel-title">本社確認</div>
+            <span class="mini err" id="sideIssues">2件</span>
           </div>
           <div class="panel-body">
-            <div class="bars" id="reportBars"></div>
+            <div class="check-list" id="sideCheckRows"></div>
+            <button class="btn green" type="button" id="fixOne" style="width:100%;margin-top:12px">先頭の不備を修正</button>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </aside>
+    </div>
   </div>
 
   <div class="toast" id="toast">更新しました</div>
@@ -756,132 +941,176 @@
       ["車両 42", 18.5]
     ];
 
-    const titles = {
-      dashboard: "本日の配車状況",
-      schedule: "配車予定登録",
-      mobile: "現場入力",
-      check: "不一致チェック",
-      report: "帳票出力"
-    };
-
-    function issues() {
+    function getIssues() {
       return records.map((record, index) => {
         if (record.fixed) return null;
         if (record.actual !== "未入力" && record.attendance === "打刻なし") {
-          return { index, label: "出勤打刻なし", text: `${record.customer} / ${record.car} / ${record.actual}` };
+          return { index, title: "出勤打刻なし", text: `${record.customer} / ${record.car} / ${record.actual}` };
         }
-        if (record.plan !== record.actual && record.actual !== "未入力") {
-          return { index, label: "予定と実績の差異", text: `${record.customer} / 予定 ${record.plan} / 実績 ${record.actual}` };
+        if (record.actual !== "未入力" && record.plan !== record.actual) {
+          return { index, title: "予定と実績の差異", text: `${record.customer} / 予定 ${record.plan} / 実績 ${record.actual}` };
         }
         if (record.actual === "未入力") {
-          return { index, label: "実績未入力", text: `${record.customer} / ${record.car}` };
+          return { index, title: "実績未入力", text: `${record.customer} / ${record.car}` };
         }
         return null;
       }).filter(Boolean);
     }
 
-    function status(record) {
+    function state(record) {
       if (record.fixed) return ["確定", "ok"];
-      if (record.actual === "未入力") return ["未入力", "err"];
-      if (record.attendance === "打刻なし") return ["要確認", "err"];
+      if (record.attendance === "打刻なし" || record.actual === "未入力") return ["要確認", "err"];
       if (record.plan !== record.actual) return ["差異", "warn"];
       return ["確認待ち", "info"];
     }
 
-    function row(record) {
-      const [label, cls] = status(record);
-      return `
-        <tr>
-          <td>${record.customer}</td>
-          <td>${record.car}</td>
-          <td>${record.plan}</td>
-          <td>${record.actual}</td>
-          <td>${record.attendance}</td>
-          <td><span class="tag ${cls}">${label}</span></td>
-        </tr>
-      `;
-    }
-
-    function renderRows() {
-      document.getElementById("dashboardRows").innerHTML = records.map(row).join("");
-      document.getElementById("actualRows").innerHTML = records.map(row).join("");
-      document.getElementById("scheduleRows").innerHTML = records.map(record => `
-        <tr>
-          <td>${record.date}</td>
-          <td>${record.customer}</td>
-          <td>${record.car}</td>
-          <td>${record.plan}</td>
-          <td><span class="tag ok">登録済み</span></td>
-        </tr>
-      `).join("");
-
-      document.getElementById("target").innerHTML = records.map((record, index) => `
-        <option value="${index}">${record.date} ${record.customer} ${record.car}</option>
-      `).join("");
-    }
-
-    function renderIssues() {
-      const list = issues();
-      document.getElementById("issueRows").innerHTML = list.length ? list.map(item => `
-        <div class="issue err">
-          <div>
-            <strong>${item.label}</strong>
-            <span>${item.text}</span>
-          </div>
-          <span class="tag err">要確認</span>
-        </div>
-      `).join("") : `
-        <div class="issue ok">
-          <div>
-            <strong>不一致はありません</strong>
-            <span>実績確定に進めます</span>
-          </div>
-          <span class="tag ok">完了</span>
-        </div>
-      `;
-
-      document.getElementById("issueCount").textContent = `${list.length}件`;
-      document.getElementById("fixedCount").textContent = `${records.filter(record => record.fixed).length}件`;
-      document.getElementById("todayCount").textContent = `${records.length}件`;
-    }
-
-    function renderBars() {
-      const bars = cars.map(([car, value]) => {
-        const width = Math.min(100, Math.round(value / 23 * 100));
-        const color = value >= 23 ? "var(--green)" : value >= 21 ? "var(--yellow)" : "var(--red)";
-        return `
-          <div class="bar-row">
-            <strong>${car}</strong>
-            <div class="bar-bg"><div class="bar-fill" style="width:${width}%;background:${color}"></div></div>
-            <span>${value.toFixed(1)}日</span>
-          </div>
-        `;
-      }).join("");
-      document.getElementById("dashBars").innerHTML = bars;
-      document.getElementById("reportBars").innerHTML = bars;
-    }
-
-    function renderAll() {
-      renderRows();
-      renderIssues();
-      renderBars();
+    function show(viewId) {
+      document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+      document.querySelectorAll("[data-view]").forEach(button => button.classList.remove("active"));
+      document.getElementById(viewId).classList.add("active");
+      document.querySelector(`[data-view="${viewId}"]`)?.classList.add("active");
+      document.querySelectorAll(".task").forEach(task => task.classList.toggle("active", task.dataset.viewJump === viewId));
     }
 
     function toast(text) {
-      const element = document.getElementById("toast");
-      element.textContent = text;
-      element.classList.add("show");
-      window.setTimeout(() => element.classList.remove("show"), 1400);
+      const el = document.getElementById("toast");
+      el.textContent = text;
+      el.classList.add("show");
+      window.setTimeout(() => el.classList.remove("show"), 1300);
+    }
+
+    function renderCards() {
+      document.getElementById("routeCards").innerHTML = records.map((record, index) => {
+        const [label, cls] = state(record);
+        return `
+          <article class="route-card">
+            <div class="route-main">
+              <div class="route-title">
+                <strong>${record.customer}</strong>
+                <span class="mini ${cls}">${label}</span>
+              </div>
+              <div class="route-meta">
+                <span>${record.car}</span>
+                <span>予定 ${record.plan}</span>
+                <span>実績 ${record.actual}</span>
+                <span>${record.attendance}</span>
+              </div>
+            </div>
+            <div class="route-actions">
+              <button class="ghost" type="button" data-fill="${index}">入力</button>
+              <button class="ghost" type="button" data-fix="${index}">確定</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-fill]").forEach(button => {
+        button.addEventListener("click", () => {
+          document.getElementById("target").value = button.dataset.fill;
+          show("field");
+        });
+      });
+
+      document.querySelectorAll("[data-fix]").forEach(button => {
+        button.addEventListener("click", () => {
+          const record = records[Number(button.dataset.fix)];
+          record.actual = record.plan;
+          record.attendance = "打刻あり";
+          record.fixed = true;
+          renderAll();
+          toast("確定しました");
+        });
+      });
+    }
+
+    function renderTables() {
+      const fullRows = records.map(record => {
+        const [label, cls] = state(record);
+        return `
+          <tr>
+            <td>${record.customer}</td>
+            <td>${record.car}</td>
+            <td>${record.plan}</td>
+            <td>${record.actual}</td>
+            <td>${record.attendance}</td>
+            <td><span class="mini ${cls}">${label}</span></td>
+          </tr>
+        `;
+      }).join("");
+      document.getElementById("rowsToday").innerHTML = fullRows;
+      document.getElementById("rowsField").innerHTML = records.map(record => {
+        const [label, cls] = state(record);
+        return `
+          <tr>
+            <td>${record.customer}</td>
+            <td>${record.car}</td>
+            <td>${record.actual}</td>
+            <td>${record.attendance}</td>
+            <td><span class="mini ${cls}">${label}</span></td>
+          </tr>
+        `;
+      }).join("");
+      document.getElementById("target").innerHTML = records.map((record, index) => `
+        <option value="${index}">${record.customer} / ${record.car}</option>
+      `).join("");
+    }
+
+    function renderChecks() {
+      const issues = getIssues();
+      const html = issues.length ? issues.map(issue => `
+        <div class="check err">
+          <div>
+            <strong>${issue.title}</strong>
+            <span>${issue.text}</span>
+          </div>
+          <span class="mini err">確認</span>
+        </div>
+      `).join("") : `
+        <div class="check ok">
+          <div>
+            <strong>不一致なし</strong>
+            <span>本日の実績を確定できます</span>
+          </div>
+          <span class="mini ok">完了</span>
+        </div>
+      `;
+      document.getElementById("checkRows").innerHTML = html;
+      document.getElementById("sideCheckRows").innerHTML = html;
+      document.getElementById("mIssue").textContent = `${issues.length}件`;
+      document.getElementById("taskIssue").textContent = issues.length;
+      document.getElementById("taskCount").textContent = `${issues.length}件`;
+      document.getElementById("sideIssues").textContent = `${issues.length}件`;
+      document.getElementById("mToday").textContent = `${records.length}件`;
+      document.getElementById("mFixed").textContent = `${records.filter(record => record.fixed).length}件`;
+    }
+
+    function renderBars() {
+      document.getElementById("bars").innerHTML = cars.map(([name, value]) => {
+        const width = Math.min(100, Math.round(value / 23 * 100));
+        const color = value >= 23 ? "var(--green)" : value >= 21 ? "var(--amber)" : "var(--red)";
+        return `
+          <div class="bar">
+            <span>${name}</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${width}%;background:${color}"></div></div>
+            <span>${value.toFixed(1)}</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderAll() {
+      renderCards();
+      renderTables();
+      renderChecks();
+      renderBars();
     }
 
     document.querySelectorAll("[data-view]").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll("[data-view]").forEach(item => item.classList.remove("active"));
-        document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
-        button.classList.add("active");
-        document.getElementById(button.dataset.view).classList.add("active");
-        document.getElementById("pageTitle").textContent = titles[button.dataset.view];
-      });
+      button.addEventListener("click", () => show(button.dataset.view));
+    });
+
+    document.querySelectorAll("[data-view-jump]").forEach(button => {
+      button.addEventListener("click", () => show(button.dataset.viewJump));
     });
 
     document.getElementById("addSchedule").addEventListener("click", () => {
@@ -895,46 +1124,42 @@
         fixed: false
       });
       renderAll();
-      toast("予定を登録しました");
+      show("today");
+      toast("予定を追加しました");
     });
 
     document.getElementById("saveActual").addEventListener("click", () => {
-      const index = Number(document.getElementById("target").value);
-      records[index].actual = document.getElementById("actualDriver").value;
-      records[index].attendance = document.getElementById("attendance").value;
-      records[index].fixed = false;
+      const record = records[Number(document.getElementById("target").value)];
+      record.actual = document.getElementById("actual").value;
+      record.attendance = document.getElementById("attendance").value;
+      record.fixed = false;
       renderAll();
-      toast("実績を送信しました");
-    });
-
-    document.getElementById("runCheck").addEventListener("click", () => {
-      renderAll();
-      toast("チェックを実行しました");
+      toast("送信しました");
     });
 
     document.getElementById("fixOne").addEventListener("click", () => {
-      const first = issues()[0];
-      if (!first) return toast("修正対象はありません");
-      records[first.index].actual = records[first.index].plan;
-      records[first.index].attendance = "打刻あり";
-      records[first.index].fixed = true;
+      const issue = getIssues()[0];
+      if (!issue) return toast("修正対象はありません");
+      records[issue.index].actual = records[issue.index].plan;
+      records[issue.index].attendance = "打刻あり";
+      records[issue.index].fixed = true;
       renderAll();
-      toast("1件修正しました");
+      toast("修正しました");
     });
 
-    document.getElementById("fixAll").addEventListener("click", () => {
+    document.getElementById("quickDone").addEventListener("click", () => {
       records.forEach(record => {
         record.actual = record.plan;
         record.attendance = "打刻あり";
         record.fixed = true;
       });
       renderAll();
-      toast("全件確認済みにしました");
+      toast("本日の確認を完了しました");
     });
 
-    document.getElementById("makeReport").addEventListener("click", () => {
-      toast("Googleドライブへ保存しました");
-    });
+    document.getElementById("refreshBoard").addEventListener("click", () => toast("最新化しました"));
+    document.getElementById("runCheck").addEventListener("click", () => toast("チェックしました"));
+    document.getElementById("saveReport").addEventListener("click", () => toast("ドライブへ保存しました"));
 
     renderAll();
   </script>
