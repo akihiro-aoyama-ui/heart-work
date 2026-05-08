@@ -1,0 +1,1181 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ハートワークコーポレーション様 配車・勤怠管理デモ</title>
+  <style>
+    :root {
+      --ink: #152033;
+      --muted: #647084;
+      --line: #dbe3ee;
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --blue: #1f75ff;
+      --cyan: #16a6c9;
+      --green: #2f9d6a;
+      --lime: #b7d93f;
+      --yellow: #ffd744;
+      --red: #e83d4d;
+      --soft-blue: #eaf3ff;
+      --soft-cyan: #e8f8fb;
+      --soft-green: #eaf7ef;
+      --soft-yellow: #fff6cc;
+      --soft-red: #fff0f2;
+      --shadow: 0 14px 38px rgba(30, 44, 70, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    .hero {
+      min-height: 230px;
+      border-radius: 8px;
+      overflow: hidden;
+      color: #fff;
+      padding: 34px 38px;
+      display: grid;
+      align-content: end;
+      box-shadow: var(--shadow);
+      background:
+        linear-gradient(90deg, rgba(21, 32, 51, 0.94), rgba(29, 117, 255, 0.72)),
+        url("https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1800&q=80");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 38px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 820px;
+      margin: 14px 0 0;
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 16px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .primary,
+    .secondary,
+    .tab,
+    .icon-button {
+      border: 0;
+      border-radius: 8px;
+      min-height: 42px;
+      padding: 0 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .secondary {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+      align-items: start;
+    }
+
+    aside,
+    section,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(30, 44, 70, 0.06);
+    }
+
+    aside {
+      position: sticky;
+      top: 16px;
+      padding: 16px;
+    }
+
+    section {
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      line-height: 1.4;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .side-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .tabs {
+      display: grid;
+      gap: 8px;
+    }
+
+    .tab {
+      width: 100%;
+      text-align: left;
+      background: #f3f6fb;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .tab.active {
+      color: #fff;
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .side-metrics {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .mini-stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px;
+      background: #fff;
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 21px;
+      line-height: 1.2;
+    }
+
+    .mini-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .summary-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .summary-card strong {
+      display: block;
+      font-size: 27px;
+      line-height: 1.15;
+    }
+
+    .summary-card span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .summary-card.alert {
+      border-color: #f2b8bf;
+      background: var(--soft-red);
+    }
+
+    .summary-card.good {
+      border-color: #b5dfc8;
+      background: var(--soft-green);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 3px;
+    }
+
+    .lane {
+      min-width: 190px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .lane-head {
+      min-height: 52px;
+      display: grid;
+      place-items: center;
+      padding: 8px;
+      font-weight: 900;
+      text-align: center;
+      color: #071120;
+    }
+
+    .lane:nth-child(1) .lane-head { background: #dedede; }
+    .lane:nth-child(2) .lane-head { background: var(--lime); }
+    .lane:nth-child(3) .lane-head { background: #48c1cb; }
+    .lane:nth-child(4) .lane-head { background: var(--yellow); }
+    .lane:nth-child(5) .lane-head { background: #1faee0; }
+
+    .lane-body {
+      min-height: 360px;
+      padding: 14px;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+    }
+
+    .lane:nth-child(1) .lane-body { background: #ededed; }
+    .lane:nth-child(2) .lane-body { background: #e6f4bb; }
+    .lane:nth-child(3) .lane-body { background: #d5f2f6; }
+    .lane:nth-child(4) .lane-body { background: #fff4b4; }
+    .lane:nth-child(5) .lane-body { background: #9bdcf4; }
+
+    .flow-card {
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      padding: 12px;
+      min-height: 64px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-weight: 900;
+      line-height: 1.45;
+    }
+
+    .flow-note {
+      color: #071120;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .arrow {
+      text-align: center;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .wide-flow {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr 230px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .wide-flow .line {
+      height: 4px;
+      background: var(--ink);
+      border-radius: 999px;
+      position: relative;
+    }
+
+    .wide-flow .line::after {
+      content: "";
+      position: absolute;
+      right: -1px;
+      top: 50%;
+      width: 12px;
+      height: 12px;
+      border-top: 4px solid var(--ink);
+      border-right: 4px solid var(--ink);
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .replace-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .replace-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .replace-card .tag {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 3px 9px;
+      background: var(--soft-blue);
+      color: #1552b8;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 9px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .form-panel {
+      padding: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      padding: 0 11px;
+    }
+
+    .sheet {
+      overflow: hidden;
+    }
+
+    .sheet-bar {
+      min-height: 48px;
+      border-bottom: 1px solid var(--line);
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: #f8fafc;
+    }
+
+    .sheet-title {
+      font-weight: 900;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: var(--soft-green);
+      color: #17633f;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .pill.red {
+      background: var(--soft-red);
+      color: #b82031;
+    }
+
+    .pill.blue {
+      background: var(--soft-blue);
+      color: #1552b8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .status {
+      display: inline-flex;
+      min-width: 74px;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .status.ok {
+      background: var(--soft-green);
+      color: #17633f;
+    }
+
+    .status.warn {
+      background: var(--soft-yellow);
+      color: #8a5c00;
+    }
+
+    .status.err {
+      background: var(--soft-red);
+      color: #b82031;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .notice {
+      border-radius: 8px;
+      padding: 14px;
+      border: 1px solid #b9d1ff;
+      background: var(--soft-blue);
+      color: #173d80;
+      font-weight: 800;
+    }
+
+    .check-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .check-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .check-item.error {
+      border-color: #f1b5bf;
+      background: var(--soft-red);
+    }
+
+    .check-item.fixed {
+      border-color: #b5dfc8;
+      background: var(--soft-green);
+    }
+
+    .check-item strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .check-item span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .report-card {
+      min-height: 160px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .report-card strong {
+      font-size: 16px;
+    }
+
+    .report-preview {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .bar-chart {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 90px minmax(0, 1fr) 48px;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .bar-bg {
+      height: 12px;
+      border-radius: 999px;
+      background: #e8edf5;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--blue);
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 980px) {
+      .layout,
+      .workspace,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+      }
+
+      .summary-grid,
+      .replace-grid,
+      .report-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: 14px;
+      }
+
+      .hero {
+        padding: 26px 20px;
+      }
+
+      .summary-grid,
+      .replace-grid,
+      .report-grid,
+      .wide-flow {
+        grid-template-columns: 1fr;
+      }
+
+      .wide-flow .line {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <p class="eyebrow">ハートワークコーポレーション様 配車・勤怠管理デモ</p>
+      <h1>キントーン予定の仕組みを、GASとスプレッドシートで再現する</h1>
+      <p>予定を正として前日までに登録し、当日の変更だけを現場が入力。配車実績と出勤記録を自動照合し、23日稼働の見込みとレポート出力まで一気通貫で確認できます。</p>
+      <div class="top-actions">
+        <button class="primary" type="button" data-jump="demo">デモを操作する</button>
+        <button class="secondary" type="button" data-jump="flow">構成を見る</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside>
+        <div class="side-title">デモ画面</div>
+        <div class="tabs">
+          <button class="tab active" type="button" data-view="dashboard">全体ダッシュボード</button>
+          <button class="tab" type="button" data-view="schedule">予定入力</button>
+          <button class="tab" type="button" data-view="actual">実績・出勤入力</button>
+          <button class="tab" type="button" data-view="check">自動照合</button>
+          <button class="tab" type="button" data-view="report">レポート出力</button>
+        </div>
+        <div class="side-metrics">
+          <div class="mini-stat">
+            <strong id="sideRunDays">21.8日</strong>
+            <span>月末着地見込み</span>
+          </div>
+          <div class="mini-stat">
+            <strong id="sideErrors">2件</strong>
+            <span>要確認レコード</span>
+          </div>
+          <div class="mini-stat">
+            <strong>毎日5分</strong>
+            <span>例外だけ確認する運用へ</span>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <section>
+          <h2>いま紙・Excel・メールで起きていること</h2>
+          <div class="summary-grid">
+            <div class="summary-card alert">
+              <strong>月末集中</strong>
+              <span>配車表、供配実績、出勤簿を後から突き合わせる</span>
+            </div>
+            <div class="summary-card alert">
+              <strong>確認漏れ</strong>
+              <span>実績に名前があるのに打刻がない、などが埋もれる</span>
+            </div>
+            <div class="summary-card">
+              <strong>23日</strong>
+              <span>稼働基準に届くか、途中で判断しづらい</span>
+            </div>
+            <div class="summary-card good">
+              <strong>日次化</strong>
+              <span>GASで不一致だけを出し、日々直す運用へ</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="flow">
+          <h2>GAS・スプレッドシートで置き換える構成</h2>
+          <p>キントーンのアプリパック、krewData、K-reportで想定していた役割を、Googleフォーム、スプレッドシート、GAS、Googleドライブ出力で再構成します。</p>
+          <div class="replace-grid">
+            <div class="replace-card">
+              <span class="tag">入力</span>
+              <h3>Googleフォーム</h3>
+              <p>マネージャーは翌日予定、ドライバーは当日変更と出勤をスマホから入力。</p>
+            </div>
+            <div class="replace-card">
+              <span class="tag">管理</span>
+              <h3>スプレッドシート</h3>
+              <p>顧客軸、車両軸、スタッフ軸の表を同じデータから自動生成。</p>
+            </div>
+            <div class="replace-card">
+              <span class="tag">自動処理</span>
+              <h3>GAS</h3>
+              <p>実績と出勤を毎日照合し、不一致、23日見込み、レポートを自動更新。</p>
+            </div>
+          </div>
+
+          <div class="flow" style="margin-top:16px">
+            <div class="lane">
+              <div class="lane-head">顧客軸予定表</div>
+              <div class="lane-body">
+                <div class="flow-card">受注・依頼</div>
+                <div class="arrow">↓</div>
+                <div class="flow-card">予定表作成</div>
+                <div class="arrow">↓</div>
+                <div class="flow-card">顧客別実績</div>
+                <div class="flow-note">顧客ごとの車両・ドライバー・23日稼働を管理</div>
+              </div>
+            </div>
+            <div class="lane">
+              <div class="lane-head">車軸配車表</div>
+              <div class="lane-body">
+                <div class="flow-card">配車予定</div>
+                <div class="arrow">↓</div>
+                <div class="flow-card">車両別管理</div>
+                <div class="arrow">↓</div>
+                <div class="flow-card">空き枠確認</div>
+                <div class="flow-note">追加案件を受けられる車両が見える</div>
+              </div>
+            </div>
+            <div class="lane">
+              <div class="lane-head">出勤簿</div>
+              <div class="lane-body">
+                <div class="flow-card">出勤入力</div>
+                <div class="arrow">↓</div>
+                <div class="flow-card">日々出勤管理</div>
+                <div class="arrow">↓</div>
+                <div class="flow-card">勤怠表</div>
+                <div class="flow-note">スマホ入力で出勤記録を一元化</div>
+              </div>
+            </div>
+            <div class="lane">
+              <div class="lane-head">ドライバー・マネージャー</div>
+              <div class="lane-body">
+                <div class="flow-card">前日予定を登録</div>
+                <div class="arrow">↓</div>
+                <div class="flow-card">当日は変更だけ入力</div>
+                <div class="arrow">↓</div>
+                <div class="flow-card">エラー修正</div>
+              </div>
+            </div>
+            <div class="lane">
+              <div class="lane-head">本社業務</div>
+              <div class="lane-body">
+                <div class="flow-card">GAS自動照合</div>
+                <div class="arrow">↓</div>
+                <div class="flow-card">不備だけ確認</div>
+                <div class="arrow">↓</div>
+                <div class="flow-card">実績確定</div>
+              </div>
+            </div>
+          </div>
+          <div class="wide-flow">
+            <div class="line"></div>
+            <div class="flow-card">実績セットをGASで照合</div>
+            <div class="line"></div>
+          </div>
+        </section>
+
+        <section id="demo">
+          <h2>操作デモ</h2>
+          <p>予定入力、出勤入力、照合、レポート出力の順に切り替えられます。入力を変えるとシートと照合結果も変わります。</p>
+
+          <div id="view-dashboard" class="demo-view">
+            <div class="split" style="margin-top:14px">
+              <div class="panel sheet">
+                <div class="sheet-bar">
+                  <div class="sheet-title">23日稼働モニター</div>
+                  <span class="pill blue">自動更新</span>
+                </div>
+                <div class="bar-chart" id="runChart"></div>
+              </div>
+              <div class="panel sheet">
+                <div class="sheet-bar">
+                  <div class="sheet-title">本日の確認状況</div>
+                  <span class="pill red" id="dashboardErrorPill">要確認 2件</span>
+                </div>
+                <div class="check-list" id="dashboardChecks" style="padding:14px"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="view-schedule" class="demo-view hidden">
+            <div class="workspace" style="margin-top:14px">
+              <div class="panel form-panel">
+                <h3>翌日予定入力フォーム</h3>
+                <p style="margin-bottom:14px">前日までにマネージャーが入力します。</p>
+                <div class="field">
+                  <label for="scheduleCustomer">顧客名</label>
+                  <select id="scheduleCustomer">
+                    <option>サコス株式会社</option>
+                    <option>東海リース</option>
+                    <option>三和建材</option>
+                    <option>城南物流</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="scheduleCar">車両</label>
+                  <select id="scheduleCar">
+                    <option>車両 12</option>
+                    <option>車両 18</option>
+                    <option>車両 23</option>
+                    <option>車両 31</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="scheduleDriver">予定ドライバー</label>
+                  <select id="scheduleDriver">
+                    <option>佐藤 健</option>
+                    <option>鈴木 誠</option>
+                    <option>田中 亮</option>
+                    <option>高橋 直人</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="scheduleDate">稼働日</label>
+                  <input id="scheduleDate" type="date" value="2026-05-11">
+                </div>
+                <button class="primary" type="button" id="addSchedule">予定をシートへ反映</button>
+              </div>
+              <div class="panel sheet">
+                <div class="sheet-bar">
+                  <div class="sheet-title">配車予定シート</div>
+                  <span class="pill">予定を正として管理</span>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>日付</th>
+                        <th>顧客</th>
+                        <th>車両</th>
+                        <th>予定ドライバー</th>
+                        <th>状態</th>
+                      </tr>
+                    </thead>
+                    <tbody id="scheduleRows"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="view-actual" class="demo-view hidden">
+            <div class="workspace" style="margin-top:14px">
+              <div class="panel form-panel">
+                <h3>当日実績・出勤入力</h3>
+                <p style="margin-bottom:14px">現場は変更がある場合だけ実績を直します。</p>
+                <div class="field">
+                  <label for="actualTarget">対象予定</label>
+                  <select id="actualTarget"></select>
+                </div>
+                <div class="field">
+                  <label for="actualDriver">実績ドライバー</label>
+                  <select id="actualDriver">
+                    <option>佐藤 健</option>
+                    <option>鈴木 誠</option>
+                    <option>田中 亮</option>
+                    <option>高橋 直人</option>
+                    <option>未入力</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="attendance">出勤打刻</label>
+                  <select id="attendance">
+                    <option>打刻あり</option>
+                    <option>打刻なし</option>
+                  </select>
+                </div>
+                <button class="primary" type="button" id="updateActual">実績を反映</button>
+              </div>
+              <div class="panel sheet">
+                <div class="sheet-bar">
+                  <div class="sheet-title">実績・出勤シート</div>
+                  <span class="pill blue">フォーム送信で追記</span>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>顧客</th>
+                        <th>車両</th>
+                        <th>予定</th>
+                        <th>実績</th>
+                        <th>出勤</th>
+                        <th>確認</th>
+                      </tr>
+                    </thead>
+                    <tbody id="actualRows"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="view-check" class="demo-view hidden">
+            <div class="split" style="margin-top:14px">
+              <div class="panel form-panel">
+                <h3>GAS自動照合</h3>
+                <p style="margin-bottom:14px">配車実績に名前があるのに出勤打刻がない、予定と実績が違う、といった不一致だけを抽出します。</p>
+                <div class="notice" id="checkNotice">毎日18:00に自動実行。いま手動でも実行できます。</div>
+                <button class="primary" type="button" id="runCheck" style="margin-top:12px">照合を実行</button>
+                <button class="primary" type="button" id="fixFirst" style="margin-top:10px;background:var(--green)">先頭の不備を修正済みにする</button>
+              </div>
+              <div class="panel sheet">
+                <div class="sheet-bar">
+                  <div class="sheet-title">要確認リスト</div>
+                  <span class="pill red" id="checkCount">要確認 2件</span>
+                </div>
+                <div class="check-list" id="checkRows" style="padding:14px"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="view-report" class="demo-view hidden">
+            <div style="margin-top:14px">
+              <div class="report-grid">
+                <div class="report-card">
+                  <strong>顧客軸配車表</strong>
+                  <p>顧客ごとに1か月の車両とドライバーを出力。</p>
+                  <span class="pill blue">PDF</span>
+                </div>
+                <div class="report-card">
+                  <strong>車両軸配車表</strong>
+                  <p>車両ごとの稼働、空き枠、追加受け入れ余地を確認。</p>
+                  <span class="pill blue">PDF</span>
+                </div>
+                <div class="report-card">
+                  <strong>勤怠表レポート</strong>
+                  <p>出勤入力から勤怠表を自動整形。</p>
+                  <span class="pill blue">PDF</span>
+                </div>
+                <div class="report-card">
+                  <strong>週次経営レポート</strong>
+                  <p>23日稼働の見込みと不備件数を週次で共有。</p>
+                  <span class="pill blue">PDF</span>
+                </div>
+              </div>
+              <div class="report-preview">
+                <div class="sheet-bar">
+                  <div class="sheet-title">週次経営レポート プレビュー</div>
+                  <button class="primary" type="button" id="makeReport">PDFを作成</button>
+                </div>
+                <div class="bar-chart" id="reportPreview"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const records = [
+      { date: "2026-05-11", customer: "サコス株式会社", car: "車両 12", planDriver: "佐藤 健", actualDriver: "佐藤 健", attendance: "打刻あり", fixed: false },
+      { date: "2026-05-11", customer: "東海リース", car: "車両 18", planDriver: "鈴木 誠", actualDriver: "鈴木 誠", attendance: "打刻なし", fixed: false },
+      { date: "2026-05-12", customer: "三和建材", car: "車両 23", planDriver: "田中 亮", actualDriver: "高橋 直人", attendance: "打刻あり", fixed: false },
+      { date: "2026-05-12", customer: "城南物流", car: "車両 31", planDriver: "高橋 直人", actualDriver: "高橋 直人", attendance: "打刻あり", fixed: false }
+    ];
+
+    const carDays = [
+      ["車両 12", 23.4],
+      ["車両 18", 20.8],
+      ["車両 23", 22.1],
+      ["車両 31", 21.0],
+      ["車両 42", 18.5]
+    ];
+
+    function getIssues() {
+      return records.map((record, index) => {
+        if (record.fixed) return null;
+        if (record.actualDriver !== "未入力" && record.attendance === "打刻なし") {
+          return {
+            index,
+            title: `${record.actualDriver}さんの出勤打刻がありません`,
+            detail: `${record.customer} / ${record.car} / 配車実績あり、出勤記録なし`,
+            type: "出勤不一致"
+          };
+        }
+        if (record.planDriver !== record.actualDriver && record.actualDriver !== "未入力") {
+          return {
+            index,
+            title: "予定ドライバーと実績ドライバーが違います",
+            detail: `${record.customer} / 予定 ${record.planDriver}、実績 ${record.actualDriver}`,
+            type: "予定差異"
+          };
+        }
+        if (record.actualDriver === "未入力") {
+          return {
+            index,
+            title: "実績ドライバーが未入力です",
+            detail: `${record.customer} / ${record.car}`,
+            type: "実績未入力"
+          };
+        }
+        return null;
+      }).filter(Boolean);
+    }
+
+    function renderSchedule() {
+      document.getElementById("scheduleRows").innerHTML = records.map(record => `
+        <tr>
+          <td>${record.date}</td>
+          <td>${record.customer}</td>
+          <td>${record.car}</td>
+          <td>${record.planDriver}</td>
+          <td><span class="status ok">予定登録</span></td>
+        </tr>
+      `).join("");
+
+      const target = document.getElementById("actualTarget");
+      target.innerHTML = records.map((record, index) => `
+        <option value="${index}">${record.date} ${record.customer} ${record.car}</option>
+      `).join("");
+    }
+
+    function renderActual() {
+      document.getElementById("actualRows").innerHTML = records.map(record => {
+        const ok = record.fixed || (record.planDriver === record.actualDriver && record.attendance === "打刻あり");
+        const warn = record.planDriver !== record.actualDriver && record.actualDriver !== "未入力";
+        return `
+          <tr>
+            <td>${record.customer}</td>
+            <td>${record.car}</td>
+            <td>${record.planDriver}</td>
+            <td>${record.actualDriver}</td>
+            <td>${record.attendance}</td>
+            <td><span class="status ${ok ? "ok" : warn ? "warn" : "err"}">${ok ? "正常" : warn ? "差異" : "不備"}</span></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderChecks() {
+      const issues = getIssues();
+      const empty = `<div class="check-item fixed"><div><strong>要確認はありません</strong><span>実績確定へ進めます。</span></div><span class="status ok">完了</span></div>`;
+      const html = issues.length ? issues.map(issue => `
+        <div class="check-item error">
+          <div>
+            <strong>${issue.title}</strong>
+            <span>${issue.detail}</span>
+          </div>
+          <span class="status err">${issue.type}</span>
+        </div>
+      `).join("") : empty;
+
+      document.getElementById("checkRows").innerHTML = html;
+      document.getElementById("dashboardChecks").innerHTML = html;
+      document.getElementById("checkCount").textContent = `要確認 ${issues.length}件`;
+      document.getElementById("dashboardErrorPill").textContent = `要確認 ${issues.length}件`;
+      document.getElementById("sideErrors").textContent = `${issues.length}件`;
+      document.getElementById("checkCount").className = issues.length ? "pill red" : "pill";
+      document.getElementById("dashboardErrorPill").className = issues.length ? "pill red" : "pill";
+    }
+
+    function renderChart() {
+      const html = carDays.map(([car, days]) => {
+        const width = Math.min(100, Math.round(days / 23 * 100));
+        const color = days >= 23 ? "var(--green)" : days >= 21 ? "var(--yellow)" : "var(--red)";
+        return `
+          <div class="bar-row">
+            <strong>${car}</strong>
+            <div class="bar-bg"><div class="bar-fill" style="width:${width}%;background:${color}"></div></div>
+            <span>${days.toFixed(1)}日</span>
+          </div>
+        `;
+      }).join("");
+      document.getElementById("runChart").innerHTML = html;
+      document.getElementById("reportPreview").innerHTML = `
+        <div class="notice">今月の着地見込みは平均21.8日。車両18、31、42に空き枠があるため、追加案件の受け入れ余地があります。</div>
+        ${html}
+      `;
+    }
+
+    function renderAll() {
+      renderSchedule();
+      renderActual();
+      renderChecks();
+      renderChart();
+    }
+
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(item => item.classList.remove("active"));
+        tab.classList.add("active");
+        document.querySelectorAll(".demo-view").forEach(view => view.classList.add("hidden"));
+        document.getElementById(`view-${tab.dataset.view}`).classList.remove("hidden");
+      });
+    });
+
+    document.querySelectorAll("[data-jump]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.getElementById(button.dataset.jump).scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    document.getElementById("addSchedule").addEventListener("click", () => {
+      records.unshift({
+        date: document.getElementById("scheduleDate").value,
+        customer: document.getElementById("scheduleCustomer").value,
+        car: document.getElementById("scheduleCar").value,
+        planDriver: document.getElementById("scheduleDriver").value,
+        actualDriver: "未入力",
+        attendance: "打刻なし",
+        fixed: false
+      });
+      renderAll();
+    });
+
+    document.getElementById("updateActual").addEventListener("click", () => {
+      const index = Number(document.getElementById("actualTarget").value);
+      records[index].actualDriver = document.getElementById("actualDriver").value;
+      records[index].attendance = document.getElementById("attendance").value;
+      records[index].fixed = false;
+      renderAll();
+    });
+
+    document.getElementById("runCheck").addEventListener("click", () => {
+      const issues = getIssues().length;
+      document.getElementById("checkNotice").textContent = issues
+        ? `照合完了。${issues}件の不一致を検出しました。全件確認ではなく、このリストだけ修正します。`
+        : "照合完了。不一致はありません。実績確定へ進めます。";
+      renderAll();
+    });
+
+    document.getElementById("fixFirst").addEventListener("click", () => {
+      const issue = getIssues()[0];
+      if (!issue) return;
+      const record = records[issue.index];
+      record.attendance = "打刻あり";
+      record.actualDriver = record.planDriver;
+      record.fixed = true;
+      renderAll();
+    });
+
+    document.getElementById("makeReport").addEventListener("click", () => {
+      document.getElementById("reportPreview").querySelector(".notice").textContent = "PDF作成済み。Googleドライブへ保存し、週次経営レポートとして共有できます。";
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1378 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>グーグルワークスペース・人工知能 業務改善デモ</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5b6678;
+      --line: #d8e0ec;
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --green: #17845b;
+      --red: #c83b3b;
+      --yellow: #b7791f;
+      --soft-blue: #eaf1ff;
+      --soft-green: #e9f7f1;
+      --soft-red: #fff0f0;
+      --shadow: 0 16px 42px rgba(29, 43, 70, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.7;
+    }
+
+    .app {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      min-height: 220px;
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(23, 32, 51, 0.92), rgba(23, 132, 91, 0.78)),
+        url("https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1800&q=80");
+      background-position: center;
+      background-size: cover;
+      color: #fff;
+      padding: 34px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 38px;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      margin: 14px 0 0;
+      max-width: 760px;
+      font-size: 17px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+      align-items: start;
+    }
+
+    section,
+    aside {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(29, 43, 70, 0.06);
+    }
+
+    aside {
+      position: sticky;
+      top: 16px;
+      padding: 18px;
+    }
+
+    section {
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      line-height: 1.45;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .group {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .select {
+      width: 100%;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 14px;
+      padding: 0 12px;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pain-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.16s ease;
+    }
+
+    .pain-card:hover {
+      transform: translateY(-1px);
+      border-color: #b5c4db;
+    }
+
+    .pain-card.active {
+      border-color: var(--blue);
+      background: var(--soft-blue);
+      box-shadow: inset 4px 0 0 var(--blue);
+    }
+
+    .pain-card strong {
+      display: block;
+      font-size: 15px;
+      color: var(--ink);
+    }
+
+    .pain-card span {
+      display: block;
+      margin-top: 3px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 46px;
+      gap: 10px;
+    }
+
+    button.primary,
+    button.icon {
+      border: 0;
+      border-radius: 8px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    button.icon {
+      background: #152033;
+      font-size: 18px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .summary-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+      min-height: 108px;
+    }
+
+    .summary-card .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .tag.red { background: var(--soft-red); color: var(--red); }
+    .tag.blue { background: var(--soft-blue); color: var(--blue); }
+    .tag.green { background: var(--soft-green); color: var(--green); }
+
+    .feeling {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .feeling-card {
+      border-radius: 8px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      min-height: 118px;
+    }
+
+    .feeling-card.before {
+      background: #fff7f7;
+      border-color: #f3caca;
+    }
+
+    .feeling-card.after {
+      background: #f0fbf6;
+      border-color: #bce7d4;
+    }
+
+    .feeling-card .mini {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .feeling-card.before .mini { color: var(--red); }
+    .feeling-card.after .mini { color: var(--green); }
+
+    .feeling-card strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.45;
+      margin-bottom: 6px;
+    }
+
+    .demo-shell {
+      display: grid;
+      grid-template-columns: 1fr 72px 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .mock {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+      min-height: 360px;
+    }
+
+    .mock-head {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fafc;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #cad3df;
+    }
+
+    .mock-title {
+      margin-left: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .mock-body {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .messy-row,
+    .clean-row {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+      min-height: 58px;
+    }
+
+    .messy-row { border-left: 4px solid var(--red); }
+    .clean-row { border-left: 4px solid var(--green); }
+
+    .file-icon,
+    .app-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .file-icon { background: #ffe8e8; color: var(--red); }
+    .app-icon { background: #e8f7ef; color: var(--green); }
+
+    .row-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .row-sub {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .status {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--red);
+      background: var(--soft-red);
+      border-radius: 999px;
+      padding: 4px 8px;
+      white-space: nowrap;
+    }
+
+    .status.ok {
+      color: var(--green);
+      background: var(--soft-green);
+    }
+
+    .arrow-box {
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-weight: 900;
+      font-size: 30px;
+    }
+
+    .run-state {
+      min-height: 32px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .progress {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #dbe5f2;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: var(--green);
+      transition: width 0.35s ease;
+    }
+
+    .plan {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .plan-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+      min-height: 150px;
+    }
+
+    .plan-card.recommend {
+      border-color: var(--green);
+      background: var(--soft-green);
+      box-shadow: inset 0 4px 0 var(--green);
+    }
+
+    .price {
+      margin-top: 8px;
+      font-weight: 900;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .touch-demo {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .input-panel,
+    .output-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 16px;
+      min-height: 360px;
+    }
+
+    .input-panel {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 11px;
+      font: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 88px;
+    }
+
+    .result-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .result-head .pill {
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: var(--soft-green);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .result-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .result-card {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--green);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfefd;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: 0.25s ease;
+    }
+
+    .result-card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .result-card h3 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .result-card ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .notice {
+      border: 1px dashed #b5c4db;
+      border-radius: 8px;
+      padding: 14px;
+      color: var(--muted);
+      background: #f8fbff;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .start-screen {
+      margin-top: 18px;
+      padding: 24px;
+    }
+
+    .start-copy {
+      max-width: 760px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    .choice-layout {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .choice-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 16px;
+    }
+
+    .start-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .truth-preview {
+      margin-top: 16px;
+      border: 1px solid #f0c1c1;
+      border-radius: 8px;
+      background: #fff7f7;
+      padding: 14px;
+    }
+
+    .truth-preview span {
+      display: block;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+
+    .truth-preview strong {
+      display: block;
+      font-size: 17px;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+
+    .demo-view {
+      margin-top: 18px;
+    }
+
+    .demo-toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .demo-toolbar p {
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    button.secondary {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 800;
+      cursor: pointer;
+      min-height: 42px;
+      padding: 0 14px;
+    }
+
+    .emotion-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .emotion-box {
+      border-radius: 8px;
+      padding: 18px;
+      border: 1px solid var(--line);
+    }
+
+    .emotion-box.bad {
+      background: #fff4f4;
+      border-color: #f0c1c1;
+    }
+
+    .emotion-box.good {
+      background: #effaf5;
+      border-color: #b8e6d1;
+    }
+
+    .emotion-box span {
+      display: block;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .emotion-box.bad span { color: var(--red); }
+    .emotion-box.good span { color: var(--green); }
+
+    .emotion-box strong {
+      display: block;
+      font-size: 24px;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .shift-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .shift-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+      min-height: 120px;
+    }
+
+    .shift-card span {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--blue);
+      margin-bottom: 6px;
+    }
+
+    .shift-card strong {
+      display: block;
+      font-size: 17px;
+      line-height: 1.45;
+      margin-bottom: 6px;
+    }
+
+    .system-demo {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .system-head {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: #172033;
+      color: #fff;
+    }
+
+    .system-head strong {
+      font-size: 15px;
+    }
+
+    .system-head span {
+      font-size: 12px;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .system-body {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr) 300px;
+      gap: 0;
+      min-height: 520px;
+    }
+
+    .system-pane {
+      padding: 16px;
+      border-right: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    .system-pane:last-child {
+      border-right: 0;
+      background: #f6fbf8;
+    }
+
+    .system-pane h3 {
+      margin-bottom: 12px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .data-table th,
+    .data-table td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .data-table th {
+      background: #f2f6fb;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px;
+    }
+
+    .metric span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 20px;
+    }
+
+    .ai-card {
+      border: 1px solid #b8e6d1;
+      border-radius: 8px;
+      background: #fff;
+      padding: 12px;
+      margin-bottom: 10px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: 0.25s ease;
+    }
+
+    .ai-card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .ai-card h4 {
+      margin: 0 0 6px;
+      font-size: 13px;
+    }
+
+    .ai-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .layout,
+      .demo-shell,
+      .summary,
+      .feeling,
+      .touch-demo,
+      .plan,
+      .choice-layout,
+      .emotion-hero,
+      .shift-list,
+      .system-body,
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      aside { position: static; }
+      header { padding: 28px 22px; }
+      h1 { font-size: 30px; }
+      .arrow-box { transform: rotate(90deg); min-height: 72px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <p class="eyebrow">業務改善デモ</p>
+      <h1>業種と課題を選んでください</h1>
+      <p class="hero-copy">近い課題を選ぶと、業務がどう楽になるのかを実際の画面に近い形で確認できます。</p>
+    </header>
+
+    <section id="startScreen" class="start-screen">
+      <p class="start-copy">自社に近い業種と課題を選ぶと、入力、一覧化、人工知能による整理、次の行動までを一つの画面で体験できます。</p>
+      <div class="choice-layout">
+        <div class="choice-panel">
+          <div class="group">
+            <label class="label" for="industry">業種</label>
+            <select id="industry" class="select">
+              <option value="logistics">運送・物流</option>
+              <option value="construction">建設・工事</option>
+              <option value="manufacturing">製造</option>
+              <option value="care">福祉・介護</option>
+              <option value="office">士業・事務所</option>
+            </select>
+          </div>
+          <div class="start-actions">
+            <button class="primary" id="startDemo" type="button">デモを見る</button>
+          </div>
+          <div class="truth-preview">
+            <span>本当の悩み</span>
+            <strong id="startTruth">毎日確認に追われ、帰る直前まで不安が残る。</strong>
+            <p id="startRelief">導入後は、未対応が見えるので落ち着いて次に進める。</p>
+          </div>
+        </div>
+        <div class="choice-panel">
+          <h2>近い課題を選んでください</h2>
+          <div class="cards" id="painCards"></div>
+        </div>
+      </div>
+    </section>
+
+    <main id="demoView" class="demo-view hidden">
+      <div class="demo-toolbar">
+        <p id="selectedLabel">運送・物流 / 報告が遅い</p>
+        <button class="secondary" id="backToStart" type="button">選び直す</button>
+      </div>
+
+      <section>
+        <h2 id="demoTitle">日報・点検・写真報告がバラバラ</h2>
+        <div class="emotion-hero">
+          <div class="emotion-box bad">
+            <span>いま起きていること</span>
+            <strong id="beforeFeeling">確認に追われて、いつも少し不安が残る。</strong>
+            <p id="beforeFeelingText">誰に聞けばいいか、どれが最新か、何が未対応かを毎回確認している状態。</p>
+          </div>
+          <div class="emotion-box good">
+            <span>得られる状態</span>
+            <strong id="afterFeeling">仕事が圧倒的に楽になり、安心して次に進める。</strong>
+            <p id="afterFeelingText">探す・聞く・待つ時間が減り、本来やるべき判断や顧客対応に集中できる。</p>
+          </div>
+        </div>
+        <div class="shift-list">
+          <div class="shift-card">
+            <span>なくなるもの</span>
+            <strong id="disappearTitle">確認のための電話やチャット</strong>
+            <p id="disappearText">誰かに聞かないと進まない状態を減らします。</p>
+          </div>
+          <div class="shift-card">
+            <span>生まれる時間</span>
+            <strong id="timeTitle">判断とお客様対応の時間</strong>
+            <p id="timeText">探す、転記する、確認する時間を本来の仕事へ戻します。</p>
+          </div>
+          <div class="shift-card">
+            <span>会社の変化</span>
+            <strong id="companyTitle">人に依存しない安心感</strong>
+            <p id="companyText">担当者が変わっても、業務が止まりにくくなります。</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>実際の画面イメージ</h2>
+        <div class="system-demo">
+          <div class="system-head">
+            <strong id="systemTitle">業務改善システム</strong>
+            <span>入力、共有、確認、次の行動までを一画面で管理</span>
+          </div>
+          <div class="system-body">
+            <div class="system-pane">
+              <h3 id="liveTitle">報告入力</h3>
+              <div id="liveInputs"></div>
+              <button class="primary" id="liveRun" type="button">整理する</button>
+            </div>
+            <div class="system-pane">
+              <div class="metric-grid">
+                <div class="metric"><span>削減できる確認</span><strong id="metricOne">約70%</strong></div>
+                <div class="metric"><span>入力回数</span><strong id="metricTwo">1回</strong></div>
+                <div class="metric"><span>残業要因</span><strong id="metricThree">大幅減</strong></div>
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr><th>内容</th><th>状況</th><th>次の行動</th></tr>
+                </thead>
+                <tbody id="systemRows"></tbody>
+              </table>
+            </div>
+            <div class="system-pane">
+              <div class="result-head">
+                <h3>人工知能の整理</h3>
+                <span class="pill" id="livePill">未実行</span>
+              </div>
+              <div id="liveOutput" class="notice">左の内容を入力して「整理する」を押してください。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const pains = {
+      reports: {
+        label: "報告が遅い",
+        sub: "日報・写真・点検がまとまらない",
+        plan: "伴走型 / ツール開発",
+        title: "日報・点検・写真報告がバラバラ",
+        beforeTitle: "報告が紙・チャット・表計算に分散",
+        beforeText: "最新の報告、写真、確認状況が人によって違い、探す時間が増える。",
+        useTitle: "入力フォーム・共有ドライブ・人工知能要約",
+        useText: "入力先と保存先を一本化し、人工知能で要点と未対応を整理する。",
+        afterTitle: "報告と確認が同じ場所に残る",
+        afterText: "誰が見ても状況がわかり、次の対応が止まりにくくなる。",
+        beforeFeeling: "毎日確認に追われ、帰る直前まで不安が残る。",
+        beforeFeelingText: "報告が来ているのか、誰が見たのか、次に何をすべきかが見えず、結局人に聞いて回る時間が増えてしまう。",
+        afterFeeling: "仕事が圧倒的に楽になり、残業の原因が目に見えて減る。",
+        afterFeelingText: "未対応が一覧で見えるので、管理者も現場も焦らず動ける。確認のための電話やチャットが減り、帰る前の不安も小さくなる。",
+        truth: "毎日確認に追われ、帰る直前まで不安が残る。",
+        relief: "未対応が見えるだけで、管理者も現場も落ち着いて動けるようになります。",
+        disappearTitle: "確認のための電話やチャット",
+        disappearText: "報告が来たか、誰が見たかを聞いて回る時間を減らします。",
+        timeTitle: "現場を見る時間と判断する余裕",
+        timeText: "管理者が確認作業に追われず、必要な対応に集中できます。",
+        companyTitle: "帰る前の不安が小さい会社",
+        companyText: "未対応が見えるので、明日に持ち越す不安が減ります。",
+        beforeRows: ["紙の日報を夕方に回収", "写真はチャットで個別送信", "表計算へ翌日まとめて転記", "未確認の点検がわからない"],
+        afterRows: ["スマホで日報入力", "写真は案件フォルダへ自動保存", "人工知能が要点と未対応を要約", "管理者が一覧で確認"],
+      },
+      search: {
+        label: "探す時間が多い",
+        sub: "資料・最新版・権限がわからない",
+        plan: "新規導入支援 / アドバイザー型",
+        title: "資料の置き場がバラバラで最新版がわからない",
+        beforeTitle: "個人パソコン・ファイルサーバー・メール添付に分散",
+        beforeText: "誰が最新版を持っているか確認が必要で、共有漏れも起きやすい。",
+        useTitle: "共有ドライブ・権限設計",
+        useText: "部署別・案件別に置き場を決め、閲覧と編集の権限を整理する。",
+        afterTitle: "探す場所が決まり、引き継ぎも楽になる",
+        afterText: "最新資料が共有ドライブに集まり、担当者が変わっても業務が止まりにくい。",
+        beforeFeeling: "探すだけで一日が削られ、仕事が進んでいない焦りが残る。",
+        beforeFeelingText: "最新版探し、再送依頼、担当者確認が積み重なり、本来やるべき仕事に集中できない。",
+        afterFeeling: "見ればわかる状態になり、頭の中が一気に軽くなる。",
+        afterFeelingText: "資料の場所が決まると、探す時間が大幅に減る。引き継ぎも怖くなくなり、誰か一人に依存しない安心感が生まれる。",
+        truth: "探すだけで一日が削られ、仕事が進んでいない焦りが残る。",
+        relief: "資料の場所が決まると、頭の中が一気に軽くなります。",
+        disappearTitle: "最新版探しと再送依頼",
+        disappearText: "資料がどこにあるかを毎回確認する時間を減らします。",
+        timeTitle: "提案や確認に使える時間",
+        timeText: "資料探しではなく、お客様への対応や判断に時間を使えます。",
+        companyTitle: "担当者が休んでも止まらない会社",
+        companyText: "人ではなく場所に情報が残るので、引き継ぎが楽になります。",
+        beforeRows: ["見積書の最終版が複数ある", "メール添付の資料を再送", "ファイルサーバーのフォルダ名が部署ごとに違う", "退職者のパソコンに資料が残る"],
+        afterRows: ["共有ドライブで案件別管理", "最新版だけをリンク共有", "権限を部署・役職で整理", "退職時もデータが会社に残る"],
+      },
+      transfer: {
+        label: "転記が多い",
+        sub: "同じ情報を何度も入力している",
+        plan: "伴走型 / ツール開発",
+        title: "同じ情報を何度も入力している",
+        beforeTitle: "紙・表計算・別システムへ二重入力",
+        beforeText: "入力漏れやミスが起き、確認と修正に時間を取られる。",
+        useTitle: "入力フォーム・表計算・自動処理",
+        useText: "最初の入力を起点に、一覧化、通知、帳票作成までつなげる。",
+        afterTitle: "入力は一度だけ、後工程は自動化",
+        afterText: "人がやる作業を確認と判断に寄せ、単純作業を減らす。",
+        beforeFeeling: "同じ入力の繰り返しで、仕事が作業に埋もれていく。",
+        beforeFeelingText: "転記ミスが怖く、確認にも時間がかかる。忙しい日に限って単純作業が増え、残業の原因になりやすい。",
+        afterFeeling: "一度入れれば進むので、気持ちにも時間にも余白ができる。",
+        afterFeelingText: "単純作業から解放され、確認・判断・お客様対応に時間を使える。毎日の小さな負担が減り、働き方がかなり楽になる。",
+        truth: "同じ入力の繰り返しで、仕事が作業に埋もれていく。",
+        relief: "一度入れれば後工程が進むので、気持ちにも時間にも余白ができます。",
+        disappearTitle: "二重入力と転記ミスの不安",
+        disappearText: "同じ内容を何度も入力する作業を減らします。",
+        timeTitle: "確認とお客様対応の時間",
+        timeText: "単純作業ではなく、人が見るべきところに時間を使えます。",
+        companyTitle: "残業の原因を減らせる会社",
+        companyText: "忙しい日に増える転記作業を減らし、日々の負担を軽くします。",
+        beforeRows: ["紙の申込書を回収", "表計算の台帳へ転記", "担当者へメール連絡", "請求用データを再入力"],
+        afterRows: ["入力フォームで受付", "台帳へ自動反映", "担当者へチャット通知", "請求前リストを自動作成"],
+      },
+      meeting: {
+        label: "会議後が重い",
+        sub: "議事録・宿題整理に時間がかかる",
+        plan: "アドバイザー型 / 伴走型",
+        title: "会議後の議事録と宿題整理が重い",
+        beforeTitle: "メモが散らばり、決定事項が曖昧",
+        beforeText: "誰が何をするかが残らず、次回会議で同じ話が繰り返される。",
+        useTitle: "会議録・文書・人工知能",
+        useText: "会議メモから決定事項、宿題、次回確認事項を人工知能で整理する。",
+        afterTitle: "決定事項と宿題がすぐ共有される",
+        afterText: "会議後の作業が軽くなり、次の行動に移りやすくなる。",
+        beforeFeeling: "会議が終わっても仕事が増えた感覚だけが残る。",
+        beforeFeelingText: "議事録、宿題整理、共有が残り、結局あとで思い出しながら処理する。会議後の残業が当たり前になりやすい。",
+        afterFeeling: "会議後すぐに動き出せて、仕事が前に進んだ実感が残る。",
+        afterFeelingText: "決定事項と宿題がすぐ見えるので、会議がちゃんと成果に変わる。共有漏れが減り、後処理の時間も大幅に減る。",
+        truth: "会議が終わっても仕事が増えた感覚だけが残る。",
+        relief: "会議後すぐに動き出せて、仕事が前に進んだ実感が残ります。",
+        disappearTitle: "会議後の思い出し作業",
+        disappearText: "議事録、宿題、共有事項を後から整理する負担を減らします。",
+        timeTitle: "次の行動に移る時間",
+        timeText: "会議後の整理ではなく、決まったことを進める時間に変えます。",
+        companyTitle: "会議が成果に変わる会社",
+        companyText: "決定事項と宿題が残るので、同じ話を繰り返しにくくなります。",
+        beforeRows: ["個人メモだけ残る", "宿題が口頭で終わる", "資料共有が翌日になる", "次回も確認から始まる"],
+        afterRows: ["人工知能で議事録案を作成", "宿題と担当者を抽出", "文書で即日共有", "次回の議題に反映"],
+      },
+      appeal: {
+        label: "魅力が伝わらない",
+        sub: "営業資料・採用資料・ホームページに違和感",
+        plan: "クリエイティブ支援",
+        title: "会社の良さが資料やホームページで伝わっていない",
+        beforeTitle: "説明すれば伝わるが、会う前に伝わらない",
+        beforeText: "営業資料、採用ページ、ホームページで強みがぼやけ、比較されたときに選ばれにくい。",
+        useTitle: "情報整理・見せ方・コピー設計",
+        useText: "業務改善ではなく、伝わり方の課題として整理し、クリエイティブ支援へ切り替える。",
+        afterTitle: "選ばれる理由が先に伝わる",
+        afterText: "営業前、採用前、問い合わせ前に会社の価値が伝わる状態を作る。",
+        beforeFeeling: "いい会社なのに、選ばれる前に損をしているもどかしさがある。",
+        beforeFeelingText: "会えば伝わるのに、資料やホームページだけでは強みがぼやける。営業も採用も、毎回説明から始める負担が大きい。",
+        afterFeeling: "自社の良さを自信を持って見せられ、会う前から期待される。",
+        afterFeelingText: "営業や採用の前から選ばれる理由が伝わる。説明する前の不利が減り、会社として前に進んでいる感覚が生まれる。",
+        truth: "いい会社なのに、選ばれる前に損をしているもどかしさがある。",
+        relief: "自社の良さを自信を持って見せられ、会う前から期待されます。",
+        disappearTitle: "毎回ゼロから説明する負担",
+        disappearText: "営業や採用の前に、選ばれる理由が伝わる状態を作ります。",
+        timeTitle: "深い商談や面談の時間",
+        timeText: "会社説明ではなく、相手に合わせた提案や対話に時間を使えます。",
+        companyTitle: "自信を持って見せられる会社",
+        companyText: "良さが伝わることで、営業も採用も前向きに進めやすくなります。",
+        beforeRows: ["強みが一言で言えない", "営業資料が古い", "採用ページが条件中心", "ホームページの印象が弱い"],
+        afterRows: ["選ばれる理由を整理", "営業資料の構成を改善", "採用メッセージを設計", "ホームページの見え方を改善"],
+      }
+    };
+
+    const liveDemos = {
+      reports: {
+        title: "報告入力",
+        button: "報告を整理する",
+        system: "現場報告管理",
+        metrics: ["70%減", "1回", "大幅減"],
+        fields: [
+          ["訪問先・現場名", "text", "久留米営業所"],
+          ["今日の作業内容", "textarea", "点検を実施。右側の機器に異音あり。写真を確認してほしい。"],
+          ["対応状況", "select", "確認待ち", ["確認待ち", "対応中", "完了"]]
+        ],
+        rows(values) {
+          return [
+            [values[0] || "現場未入力", values[2] || "確認待ち", "写真確認と担当者設定"],
+            ["点検写真", "保存済み", "案件フォルダへ自動整理"],
+            ["未対応一覧", "抽出済み", "本日中に確認"]
+          ];
+        },
+        results(values) {
+          return [
+            ["要点", [`${values[0]}の報告`, values[1] || "作業内容が未入力です", `状況は「${values[2]}」`]],
+            ["共有先", ["管理者", "担当営業", "写真確認担当"]],
+            ["得られる状態", ["確認電話が減る", "現場と管理者が同じ画面を見られる", "帰る前の不安が小さくなる"]]
+          ];
+        }
+      },
+      search: {
+        title: "資料整理",
+        button: "置き場を整理する",
+        system: "資料共有管理",
+        metrics: ["80%減", "1か所", "大幅減"],
+        fields: [
+          ["資料名", "text", "見積書 最終版"],
+          ["いまの保存場所", "select", "個人パソコン", ["個人パソコン", "ファイルサーバー", "メール添付", "担当者だけが知っている"]],
+          ["見せたい相手", "text", "営業部、管理者"]
+        ],
+        rows(values) {
+          return [
+            [values[0] || "資料未入力", "最新版として登録", "共有ドライブに保存"],
+            [values[1] || "保存場所未入力", "移行対象", "置き場を一本化"],
+            [values[2] || "関係者", "権限設定済み", "閲覧者を明確化"]
+          ];
+        },
+        results(values) {
+          return [
+            ["整理後の置き場", [`共有ドライブ内「${values[0]}」`, "案件別フォルダへ保存", "最新版だけを共有"]],
+            ["権限", [`閲覧者: ${values[2] || "関係者"}`, "編集者: 担当者と管理者", "退職時も会社に資料が残る"]],
+            ["得られる状態", ["資料を探す時間が大幅に減る", "最新版確認のストレスが減る", "引き継ぎが楽になる"]]
+          ];
+        }
+      },
+      transfer: {
+        title: "転記削減",
+        button: "自動化の流れを作る",
+        system: "受付・台帳管理",
+        metrics: ["90%減", "1回", "大幅減"],
+        fields: [
+          ["受付内容", "text", "修理依頼"],
+          ["いま転記している先", "text", "受付台帳、担当者メール、請求前リスト"],
+          ["通知したい人", "text", "担当者、事務担当"]
+        ],
+        rows(values) {
+          return [
+            [values[0] || "受付未入力", "受付済み", "台帳へ自動反映"],
+            ["担当者通知", "送信済み", `${values[2] || "関係者"}へ共有`],
+            ["請求前確認", "作成済み", "未処理だけ抽出"]
+          ];
+        },
+        results(values) {
+          return [
+            ["最初の入力", [`${values[0]}を入力フォームで受付`, "入力内容を台帳へ自動反映"]],
+            ["自動で動くこと", [`${values[2] || "関係者"}へ通知`, "請求前リストへ反映", "未対応だけを一覧化"]],
+            ["得られる状態", ["二重入力がほぼなくなる", "残業の原因になっていた転記が減る", "確認と判断に時間を使える"]]
+          ];
+        }
+      },
+      meeting: {
+        title: "会議メモ整理",
+        button: "議事録案を作る",
+        system: "会議・宿題管理",
+        metrics: ["75%減", "即日", "大幅減"],
+        fields: [
+          ["会議名", "text", "月次営業会議"],
+          ["会議メモ", "textarea", "来月から案件管理の方法を統一する。山田さんが共有フォルダ案を作成。金曜までに確認。"],
+          ["共有したい相手", "text", "営業部、管理者"]
+        ],
+        rows(values) {
+          return [
+            [values[0] || "会議名未入力", "議事録案あり", "決定事項を共有"],
+            ["山田さん", "宿題あり", "金曜までに確認"],
+            [values[2] || "関係者", "共有待ち", "文書で即日共有"]
+          ];
+        },
+        results(values) {
+          return [
+            ["決定事項", [`${values[0]}の内容を整理`, "案件管理の方法を統一する"]],
+            ["宿題", ["山田さんが共有フォルダ案を作成", "金曜までに確認"]],
+            ["得られる状態", ["会議後の残業が減る", "宿題の抜け漏れが減る", "会議が前に進む感覚が出る"]]
+          ];
+        }
+      },
+      appeal: {
+        title: "伝わり方整理",
+        button: "見せ方を整理する",
+        system: "魅力整理管理",
+        metrics: ["明確化", "1本化", "改善"],
+        fields: [
+          ["伝えたい強み", "text", "対応が早く、地域の会社に詳しい"],
+          ["いま使っている資料", "select", "営業資料", ["営業資料", "採用資料", "ホームページ", "会社案内"]],
+          ["見てほしい相手", "text", "新規顧客、求職者"]
+        ],
+        rows(values) {
+          return [
+            [values[0] || "強み未入力", "整理中", "選ばれる理由へ変換"],
+            [values[1] || "資料未選択", "改善対象", "構成を見直し"],
+            [values[2] || "見込み客", "対象設定済み", "言葉を合わせる"]
+          ];
+        },
+        results(values) {
+          return [
+            ["伝える軸", [`強み: ${values[0] || "未入力"}`, `対象: ${values[2] || "見込み客"}`]],
+            ["改善する場所", [`${values[1]}の構成`, "選ばれる理由の見出し", "事例や実績の見せ方"]],
+            ["得られる状態", ["会う前から期待される", "営業や採用で説明が楽になる", "自社の良さを自信を持って見せられる"]]
+          ];
+        }
+      }
+    };
+
+    let activePain = "reports";
+    const industryNames = {
+      logistics: "運送・物流",
+      construction: "建設・工事",
+      manufacturing: "製造",
+      care: "福祉・介護",
+      office: "士業・事務所"
+    };
+
+    const painCards = document.getElementById("painCards");
+    const industry = document.getElementById("industry");
+    const startDemo = document.getElementById("startDemo");
+    const backToStart = document.getElementById("backToStart");
+    const liveRun = document.getElementById("liveRun");
+
+    function renderPainCards() {
+      painCards.innerHTML = "";
+      Object.entries(pains).forEach(([key, pain]) => {
+        const card = document.createElement("button");
+        card.className = "pain-card" + (key === activePain ? " active" : "");
+        card.type = "button";
+        card.innerHTML = `<strong>${pain.label}</strong><span>${pain.sub}</span>`;
+        card.addEventListener("click", () => {
+          activePain = key;
+          renderAll(false);
+        });
+        painCards.appendChild(card);
+      });
+    }
+
+    function renderLiveDemo() {
+      const demo = liveDemos[activePain];
+      document.getElementById("liveTitle").textContent = demo.title;
+      document.getElementById("systemTitle").textContent = demo.system;
+      liveRun.textContent = demo.button;
+      document.getElementById("livePill").textContent = "未実行";
+      document.getElementById("liveOutput").className = "notice";
+      document.getElementById("liveOutput").textContent = "左の内容を入力して「" + demo.button + "」を押してください。";
+      document.getElementById("metricOne").textContent = demo.metrics[0];
+      document.getElementById("metricTwo").textContent = demo.metrics[1];
+      document.getElementById("metricThree").textContent = demo.metrics[2];
+      document.getElementById("liveInputs").innerHTML = demo.fields.map((field, index) => {
+        const id = `liveField${index}`;
+        if (field[1] === "textarea") {
+          return `<div class="field"><label for="${id}">${field[0]}</label><textarea id="${id}">${field[2]}</textarea></div>`;
+        }
+        if (field[1] === "select") {
+          const options = field[3].map(option => `<option${option === field[2] ? " selected" : ""}>${option}</option>`).join("");
+          return `<div class="field"><label for="${id}">${field[0]}</label><select id="${id}">${options}</select></div>`;
+        }
+        return `<div class="field"><label for="${id}">${field[0]}</label><input id="${id}" type="text" value="${field[2]}"></div>`;
+      }).join("");
+      renderSystemRows(demo.fields.map(field => field[2]));
+    }
+
+    function playLiveDemo() {
+      const demo = liveDemos[activePain];
+      const values = demo.fields.map((_, index) => document.getElementById(`liveField${index}`).value.trim());
+      const results = demo.results(values);
+      renderSystemRows(values);
+      document.getElementById("livePill").textContent = "整理済み";
+      document.getElementById("liveOutput").className = "result-grid";
+      document.getElementById("liveOutput").innerHTML = results.map((result, index) => `
+        <div class="ai-card" style="transition-delay:${index * 90}ms">
+          <h3>${result[0]}</h3>
+          <ul>${result[1].map(item => `<li>${item}</li>`).join("")}</ul>
+        </div>
+      `).join("");
+      requestAnimationFrame(() => {
+        document.querySelectorAll(".ai-card").forEach(card => card.classList.add("show"));
+      });
+    }
+
+    function renderSystemRows(values) {
+      const rows = liveDemos[activePain].rows(values);
+      document.getElementById("systemRows").innerHTML = rows.map(row => `
+        <tr>
+          <td>${row[0]}</td>
+          <td><span class="status ok">${row[1]}</span></td>
+          <td>${row[2]}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderAll() {
+      const p = pains[activePain];
+      document.getElementById("demoTitle").textContent = p.title;
+      document.getElementById("startTruth").textContent = p.truth;
+      document.getElementById("startRelief").textContent = p.relief;
+      document.getElementById("beforeFeeling").textContent = p.beforeFeeling;
+      document.getElementById("beforeFeelingText").textContent = p.beforeFeelingText;
+      document.getElementById("afterFeeling").textContent = p.afterFeeling;
+      document.getElementById("afterFeelingText").textContent = p.afterFeelingText;
+      document.getElementById("disappearTitle").textContent = p.disappearTitle;
+      document.getElementById("disappearText").textContent = p.disappearText;
+      document.getElementById("timeTitle").textContent = p.timeTitle;
+      document.getElementById("timeText").textContent = p.timeText;
+      document.getElementById("companyTitle").textContent = p.companyTitle;
+      document.getElementById("companyText").textContent = p.companyText;
+      document.getElementById("selectedLabel").textContent = `${industryNames[industry.value]} / ${p.label}`;
+      renderPainCards();
+      renderLiveDemo();
+    }
+
+    function showDemo() {
+      renderAll();
+      document.getElementById("startScreen").classList.add("hidden");
+      document.getElementById("demoView").classList.remove("hidden");
+      playLiveDemo();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showStart() {
+      document.getElementById("demoView").classList.add("hidden");
+      document.getElementById("startScreen").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    industry.addEventListener("change", renderAll);
+    startDemo.addEventListener("click", showDemo);
+    backToStart.addEventListener("click", showStart);
+    liveRun.addEventListener("click", playLiveDemo);
+
+    renderAll();
+  </script>
+</body>
+</html>

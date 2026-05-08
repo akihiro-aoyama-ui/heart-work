@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Google WorkspaceとAIで、毎日の業務をもっと軽く</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5f6878;
+      --line: #d9dee7;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --green: #16815d;
+      --amber: #b7791f;
+      --red: #c2413a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.65;
+      background: var(--bg);
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    section {
+      margin-top: 18px;
+      padding: 28px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin-bottom: 18px;
+      font-size: 24px;
+      line-height: 1.35;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    .hero {
+      padding: 40px;
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(23, 32, 51, .9), rgba(22, 129, 93, .74)),
+        url("https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1800&q=80") center/cover;
+      border: 0;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin-top: 16px;
+      color: rgba(255, 255, 255, .9);
+      font-size: 18px;
+    }
+
+    .eyebrow {
+      margin-bottom: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #d9fff2;
+    }
+
+    .lead {
+      max-width: none;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .grid { display: grid; gap: 14px; }
+    .cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .cols-services { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .card p, .small { color: var(--muted); font-size: 14px; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 2px 8px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      background: #edf9f4;
+      border-radius: 999px;
+    }
+
+    .pain {
+      border-left: 5px solid var(--red);
+    }
+
+    .improve {
+      border-left: 5px solid var(--green);
+    }
+
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: stretch;
+      margin-top: 14px;
+    }
+
+    .arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green);
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .foundation {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .block {
+      padding: 14px;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      min-height: 82px;
+    }
+
+    .ai-loop {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+      counter-reset: loop;
+    }
+
+    .loop-step {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .loop-step::before {
+      counter-increment: loop;
+      content: counter(loop);
+      display: inline-flex;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 10px;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      background: var(--green);
+      border-radius: 50%;
+    }
+
+    .service {
+      border-top: 5px solid var(--blue);
+    }
+
+    .service:nth-child(2) { border-top-color: var(--green); }
+    .service:nth-child(3) { border-top-color: var(--amber); }
+    .service:nth-child(4) { border-top-color: var(--red); }
+    .service:nth-child(5) { border-top-color: var(--blue); }
+
+    .price {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.6;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 12px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+
+    th {
+      color: var(--muted);
+      background: #f8fafc;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      padding: 7px 10px;
+      color: #30415f;
+      font-size: 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .note {
+      margin-top: 14px;
+      padding: 14px 16px;
+      color: #30415f;
+      background: #eef8f4;
+      border-left: 5px solid var(--green);
+      border-radius: 6px;
+    }
+
+    @media (max-width: 860px) {
+      section, .hero { padding: 22px; }
+      .cols-2, .cols-3, .cols-4, .cols-services, .foundation, .ai-loop, .before-after {
+        grid-template-columns: 1fr;
+      }
+      .arrow { transform: rotate(90deg); }
+    }
+
+    @media print {
+      body { background: #fff; }
+      main { width: 100%; padding: 0; }
+      section { break-inside: avoid; border-color: #ccc; }
+      .hero { color: #fff; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <div class="eyebrow">Business Improvement Proposal</div>
+    <h1>Google WorkspaceとAIで、<br>毎日の業務をもっと軽く</h1>
+    <p>メール、ファイル、会議、報告、資料作成。日々の小さな手間を整理し、社員が本来の仕事に集中できる環境を作ります。</p>
+  </section>
+
+  <section>
+    <h2>こんなことで時間を取られていませんか</h2>
+    <p class="lead">業務の中にある「探す」「まとめる」「転記する」「確認する」を減らすだけで、会社の動きは大きく変わります。</p>
+    <div class="grid cols-3">
+      <div class="card pain"><h3>資料を探す時間が多い</h3><p>最新版の資料、保存場所、共有先が人によって違う。</p></div>
+      <div class="card pain"><h3>会議後の共有が遅い</h3><p>議事録、決定事項、宿題整理に時間がかかる。</p></div>
+      <div class="card pain"><h3>AIを使いこなせない</h3><p>使いたいが、何に使えばいいか社内で決まっていない。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>導入後に目指す姿</h2>
+    <p class="lead">Google Workspaceを業務の土台にし、AIと自動化を日々の仕事に組み込みます。</p>
+    <div class="before-after">
+      <div class="card pain">
+        <span class="tag">Before</span>
+        <h3>今までの業務</h3>
+        <ul>
+          <li>PC・NAS・メール添付に資料が分散</li>
+          <li>報告は紙、Excel、口頭</li>
+          <li>AI活用が個人任せ</li>
+        </ul>
+      </div>
+      <div class="arrow">→</div>
+      <div class="card improve">
+        <span class="tag">After</span>
+        <h3>これからの業務</h3>
+        <ul>
+          <li>共有ドライブで一元管理</li>
+          <li>入力・共有・要約を効率化</li>
+          <li>会社としてAIを使える状態へ</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>仕事はこう変わります</h2>
+    <p class="lead">目的は、新しいツールを増やすことではありません。日々の迷いと手戻りを減らすことです。</p>
+    <div class="grid cols-3">
+      <div class="card improve">
+        <h3>探す時間を減らす</h3>
+        <p>資料の置き場、共有ルール、権限を整理し、必要な情報にすぐアクセスできます。</p>
+      </div>
+      <div class="card improve">
+        <h3>作る時間を減らす</h3>
+        <p>議事録、報告書、メール、提案書のたたき台をAIで作り、確認に集中できます。</p>
+      </div>
+      <div class="card improve">
+        <h3>属人化を減らす</h3>
+        <p>個人のPCや頭の中にある情報を共有し、引き継ぎやチーム対応をしやすくします。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Google Workspaceで会社の情報を整える</h2>
+    <p class="lead">メール、予定、ファイル、会議、チャットを同じ土台に乗せることで、AI活用もしやすくなります。</p>
+    <div class="foundation">
+      <div class="block"><strong>Gmail</strong><br><span class="small">安全なメール運用</span></div>
+      <div class="block"><strong>Calendar</strong><br><span class="small">予定共有</span></div>
+      <div class="block"><strong>Drive</strong><br><span class="small">ファイル管理</span></div>
+      <div class="block"><strong>Meet / Chat</strong><br><span class="small">会議・連絡</span></div>
+      <div class="block"><strong>Docs</strong><br><span class="small">文書作成</span></div>
+      <div class="block"><strong>Sheets</strong><br><span class="small">管理・集計</span></div>
+      <div class="block"><strong>権限管理</strong><br><span class="small">安全な共有</span></div>
+      <div class="block"><strong>AI活用</strong><br><span class="small">要約・作成・整理</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>AIは、身近な業務から使えます</h2>
+    <p class="lead">いきなり難しいAI導入をする必要はありません。まずは毎日発生する作業から軽くします。</p>
+    <div class="ai-loop">
+      <div class="loop-step"><h3>情報を整える</h3><p>資料、議事録、顧客情報の置き場を整理。</p></div>
+      <div class="loop-step"><h3>AIで軽くする</h3><p>要約、文章作成、回答案、資料作成を支援。</p></div>
+      <div class="loop-step"><h3>業務に組み込む</h3><p>報告、会議、問い合わせ、営業活動に反映。</p></div>
+      <div class="loop-step"><h3>改善を続ける</h3><p>使いながらルールと仕組みを更新。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>まず効果が出やすい改善テーマ</h2>
+    <p class="lead">多くの会社で効果が出やすいのは、ファイル管理・会議共有・営業報告・AI導入です。</p>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>ファイル管理</h3>
+        <p>共有ドライブ、部署別・案件別フォルダ、権限設計で整理。</p>
+      </div>
+      <div class="card">
+        <h3>営業報告</h3>
+        <p>フォーム・スプレッドシート・AI要約で入力と共有を簡単に。</p>
+      </div>
+      <div class="card">
+        <h3>会議共有</h3>
+        <p>会議メモから議事録、要点、アクションリストを作成。</p>
+      </div>
+      <div class="card">
+        <h3>AI導入</h3>
+        <p>個人利用ではなく、会社の業務フローに合わせて設計。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>部門別の活用例</h2>
+    <p class="lead">営業、総務、経理、現場、管理職。それぞれの業務に合わせて活用できます。</p>
+    <div class="grid cols-3">
+      <div class="card">
+        <span class="tag">営業</span>
+        <h3>報告・提案を軽くする</h3>
+        <ul>
+          <li>訪問メモをAIで要約</li>
+          <li>提案書のたたき台作成</li>
+          <li>営業資料を共有ドライブで整理</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">総務</span>
+        <h3>社内対応を整理する</h3>
+        <ul>
+          <li>申請・問い合わせをフォーム化</li>
+          <li>社内マニュアルをAIで検索しやすくする</li>
+          <li>入退社時のアカウント管理を整理</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">経理</span>
+        <h3>確認作業を減らす</h3>
+        <ul>
+          <li>請求・支払関連資料の置き場整理</li>
+          <li>定型メール作成</li>
+          <li>確認フローの見える化</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">管理職</span>
+        <h3>判断材料を揃える</h3>
+        <ul>
+          <li>会議内容と宿題をすぐ共有</li>
+          <li>報告内容をAIで整理</li>
+          <li>部門横断の情報共有を改善</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">現場</span>
+        <h3>スマホで完結させる</h3>
+        <ul>
+          <li>現場報告をフォーム入力</li>
+          <li>写真・資料を案件別に保存</li>
+          <li>連絡事項をChatで共有</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">経営</span>
+        <h3>会社の情報資産を整える</h3>
+        <ul>
+          <li>属人化している業務を見える化</li>
+          <li>AI活用のルールを整備</li>
+          <li>クラウド前提の働き方へ移行</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>すぐに始めやすい改善例</h2>
+    <p class="lead">小さな改善を積み重ねることで、社内全体の業務効率が上がります。</p>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>会議後の共有</h3>
+        <p>会議メモをもとに、要点・決定事項・宿題をAIで整理。Googleドキュメントで関係者へ共有します。</p>
+      </div>
+      <div class="card">
+        <h3>社内問い合わせ対応</h3>
+        <p>よくある質問やマニュアルを整理し、回答案をAIで作成。担当者の確認負荷を下げます。</p>
+      </div>
+      <div class="card">
+        <h3>営業資料作成</h3>
+        <p>過去資料やヒアリングメモをもとに、提案書の構成案やメール文面を作成します。</p>
+      </div>
+      <div class="card">
+        <h3>ファイルサーバー移行</h3>
+        <p>NASや個人PCに分散したファイルを共有ドライブへ整理し、アクセス権限も見直します。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>必要なところから始められます</h2>
+    <p class="lead">これから導入する会社も、導入済みで使いこなせていない会社も支援できます。</p>
+    <div class="grid cols-services">
+      <div class="card service">
+        <h3>Google Workspace導入支援</h3>
+        <p>初期設定、アカウント設計、ドメイン・メール設定、メール移行、共有ドライブ設計。</p>
+        <div class="price">3ヶ月完結 / アカウント数・移行内容で変動</div>
+      </div>
+      <div class="card service">
+        <h3>アドバイザー型</h3>
+        <p>月次相談、方針整理、Google Workspace・AI活用の改善案を提示。</p>
+        <div class="price">月額4万円〜</div>
+      </div>
+      <div class="card service">
+        <h3>伴走型支援</h3>
+        <p>業務ヒアリングから改善設計、AI活用、運用定着まで支援。</p>
+        <div class="price">月額12万円〜 / 3ヶ月単位</div>
+      </div>
+      <div class="card service">
+        <h3>業務ツール開発</h3>
+        <p>Google Apps Script、AI、各種ツールによる自動化。</p>
+        <div class="price">18万〜120万円目安</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>無料版と有料版の違い</h2>
+    <p class="lead">無料版でも相談は可能ですが、会社利用では有料版の方が運用しやすくなります。</p>
+    <table>
+      <tr><th>項目</th><th>無料で始める場合</th><th>Google Workspace有料版</th></tr>
+      <tr><td>主な想定</td><td>個人Googleアカウント / Essentials Starter</td><td>Business Starter / Standard / Plus</td></tr>
+      <tr><td>メール</td><td>個人Gmail。Essentials StarterはGmailなし</td><td>独自ドメインのビジネスメール</td></tr>
+      <tr><td>ストレージ</td><td>15GB</td><td>Starter 30GB、Standard 2TB、Plus 5TB</td></tr>
+      <tr><td>管理</td><td>限定的</td><td>管理コンソール、ユーザー管理、セキュリティ設定</td></tr>
+      <tr><td>Meet</td><td>基本利用</td><td>プランにより録画、ノイズキャンセル、人数拡張</td></tr>
+      <tr><td>Googleサポート</td><td>Essentials Starterは対象外</td><td>サポート対象</td></tr>
+    </table>
+    <p class="note">ライセンス費用は、原則としてお客様がGoogleと直接契約する形をおすすめします。</p>
+  </section>
+
+  <section>
+    <h2>業種別の活用イメージ</h2>
+    <p class="lead">何に困っているかわからない状態でも、近い業務から整理できます。</p>
+    <table>
+      <tr><th>業種</th><th>活用イメージ</th></tr>
+      <tr><td>運送・物流</td><td>日報、点検、配車、写真報告、請求前チェック</td></tr>
+      <tr><td>建設・工事</td><td>現場写真、進捗報告、見積、工程共有</td></tr>
+      <tr><td>製造</td><td>点検記録、在庫確認、不具合報告、作業マニュアル</td></tr>
+      <tr><td>福祉・介護</td><td>記録、シフト、申請、家族連絡</td></tr>
+      <tr><td>士業・事務所</td><td>顧客管理、契約管理、請求、議事録</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>進め方</h2>
+    <p class="lead">現状を確認し、改善テーマ・費用・進め方を整理してからスタートします。</p>
+    <div class="ai-loop">
+      <div class="loop-step"><h3>現状確認</h3><p>近い改善例と利用ツールを確認。</p></div>
+      <div class="loop-step"><h3>改善整理</h3><p>すぐできること、設計が必要なことを分ける。</p></div>
+      <div class="loop-step"><h3>提案・見積</h3><p>必要な支援内容と費用を整理。</p></div>
+      <div class="loop-step"><h3>運用・改善</h3><p>設定、AI活用、継続サポートまで実施。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>ひとつでも当てはまれば、改善できます</h2>
+    <div class="chips">
+      <span class="chip">Google Workspaceを使いこなせていない</span>
+      <span class="chip">ファイルサーバー更新が近い</span>
+      <span class="chip">AI活用を始めたい</span>
+      <span class="chip">Excelや紙を減らしたい</span>
+      <span class="chip">会議・報告に時間がかかる</span>
+      <span class="chip">業務が属人化している</span>
+      <span class="chip">引き継ぎがしづらい</span>
+    </div>
+    <p class="note">まずは現在の業務課題をお聞きし、どこから改善できるかを一緒に整理します。</p>
+  </section>
+</main>
+</body>
+</html>
