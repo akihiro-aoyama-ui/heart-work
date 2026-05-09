@@ -11,17 +11,21 @@
       --ink: #1d2935;
       --muted: #647484;
       --line: #cfd8e3;
-      --line-soft: #e7ecf2;
+      --soft-line: #e7ecf2;
       --blue: #1877f2;
       --blue-soft: #e7f3ff;
       --green: #12805c;
+      --green-soft: #e8f7f0;
       --red: #c93445;
+      --red-soft: #fff0f2;
       --amber: #a96800;
+      --amber-soft: #fff7df;
       --row: #f7f8fa;
+      --supabase: #3ecf8e;
+      --vercel: #111827;
     }
 
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       min-height: 100vh;
@@ -31,7 +35,6 @@
       font-size: 14px;
       line-height: 1.45;
     }
-
     button, input, select { font: inherit; }
     button { cursor: pointer; }
 
@@ -49,7 +52,7 @@
 
     .brand {
       padding: 0 8px 12px;
-      border-bottom: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--soft-line);
       margin-bottom: 12px;
     }
 
@@ -120,9 +123,7 @@
       padding: 8px 12px;
     }
 
-    .selectbox,
-    .tool,
-    .primary {
+    .selectbox, .tool, .primary {
       min-height: 38px;
       border-radius: 5px;
       border: 1px solid #aebdcc;
@@ -137,35 +138,16 @@
       white-space: nowrap;
     }
 
-    .selectbox {
-      justify-content: space-between;
-      overflow: hidden;
-    }
-
-    .status {
-      color: #344250;
-      font-size: 13px;
-      justify-self: end;
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .primary {
-      border-color: #0f6ed6;
-      background: var(--blue);
-      color: #fff;
-    }
+    .selectbox { justify-content: space-between; overflow: hidden; }
+    .status { color: #344250; font-size: 13px; justify-self: end; }
+    .top-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .primary { border-color: #0f6ed6; background: var(--blue); color: #fff; }
 
     .notice {
       margin: 8px 12px;
       border-radius: 5px;
       background: #fff;
-      border: 1px solid var(--line-soft);
+      border: 1px solid var(--soft-line);
       min-height: 38px;
       display: flex;
       align-items: center;
@@ -185,88 +167,86 @@
 
     .summary {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 8px;
     }
 
     .summary-card {
       background: #fff;
-      border: 1px solid var(--line-soft);
+      border: 1px solid var(--soft-line);
       border-radius: 8px 8px 0 0;
       overflow: hidden;
     }
 
     .summary-title {
       height: 42px;
-      border-bottom: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--soft-line);
       display: flex;
       align-items: center;
       gap: 8px;
       padding: 0 14px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 750;
     }
 
     .summary-body {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       padding: 10px 12px;
     }
 
-    .mini strong {
-      display: block;
-      font-size: 18px;
-      line-height: 1.15;
-    }
+    .mini strong { display: block; font-size: 18px; line-height: 1.15; }
+    .mini span { display: block; color: var(--muted); font-size: 12px; }
 
-    .mini span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-    }
+    .view { display: none; min-height: 0; }
+    .view.active { display: block; }
 
-    .table-shell {
+    .layout-two {
       min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 10px;
+    }
+
+    .panel {
       background: #fff;
       border: 1px solid var(--line);
+      min-height: 0;
       overflow: hidden;
-      display: grid;
-      grid-template-rows: auto minmax(0, 1fr);
     }
 
-    .table-actions {
+    .panel-head {
+      min-height: 46px;
+      border-bottom: 1px solid var(--line);
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 10px;
       padding: 8px;
-      border-bottom: 1px solid var(--line);
       background: #fff;
     }
 
-    .action-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .panel-title { font-weight: 800; }
+    .actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .panel-body { padding: 12px; }
 
     .table-scroll {
-      min-height: 0;
+      max-height: 520px;
       overflow: auto;
     }
 
     table {
       width: 100%;
-      min-width: 1280px;
+      min-width: 1120px;
       border-collapse: collapse;
       font-size: 13px;
     }
 
     th, td {
       border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--soft-line);
       padding: 8px 10px;
       text-align: left;
       white-space: nowrap;
@@ -286,11 +266,7 @@
 
     tbody tr:nth-child(even) { background: var(--row); }
     tbody tr:hover { background: #eaf3ff; }
-
-    .name {
-      color: #1264bf;
-      font-weight: 750;
-    }
+    .name { color: #1264bf; font-weight: 750; }
 
     .pill {
       display: inline-flex;
@@ -305,9 +281,9 @@
       font-weight: 750;
     }
 
-    .pill.ok { border-color: #9fd6c0; background: #e9f7f1; color: var(--green); }
-    .pill.err { border-color: #f2a7b1; background: #fff0f2; color: var(--red); }
-    .pill.warn { border-color: #f4d08f; background: #fff7df; color: var(--amber); }
+    .pill.ok { border-color: #9fd6c0; background: var(--green-soft); color: var(--green); }
+    .pill.err { border-color: #f2a7b1; background: var(--red-soft); color: var(--red); }
+    .pill.warn { border-color: #f4d08f; background: var(--amber-soft); color: var(--amber); }
 
     .row-action {
       min-height: 26px;
@@ -319,11 +295,104 @@
       font-weight: 700;
     }
 
-    .empty {
-      padding: 28px;
-      color: var(--muted);
-      font-weight: 700;
+    .form {
+      display: grid;
+      gap: 10px;
     }
+
+    .field {
+      display: grid;
+      gap: 5px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    input, select {
+      min-height: 38px;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #fff;
+      color: var(--ink);
+      padding: 0 10px;
+    }
+
+    .phone {
+      max-width: 340px;
+      margin: 0 auto;
+      border: 10px solid #111827;
+      border-radius: 26px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .phone-head {
+      background: #111827;
+      color: #fff;
+      text-align: center;
+      padding: 8px 12px 12px;
+      font-weight: 800;
+    }
+
+    .phone-body { padding: 14px; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(140px, 1fr));
+      gap: 10px;
+      overflow-x: auto;
+    }
+
+    .flow-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      min-height: 126px;
+      padding: 14px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      position: relative;
+    }
+
+    .flow-card:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -16px;
+      top: 45%;
+      color: var(--muted);
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .flow-card strong { font-size: 15px; }
+    .flow-card span { color: var(--muted); font-size: 12px; }
+    .flow-card.vercel { border-top: 5px solid var(--vercel); }
+    .flow-card.supabase { border-top: 5px solid var(--supabase); }
+    .flow-card.pdf { border-top: 5px solid var(--blue); }
+
+    .db-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .db-table {
+      border: 1px solid var(--soft-line);
+      border-radius: 7px;
+      background: #fff;
+      padding: 10px;
+    }
+
+    .db-table strong { display: block; margin-bottom: 6px; }
+    .db-table span { color: var(--muted); font-size: 12px; display: block; }
+
+    .empty { padding: 28px; color: var(--muted); font-weight: 700; }
 
     .toast {
       position: fixed;
@@ -341,18 +410,15 @@
       box-shadow: 0 14px 34px rgba(0,0,0,.18);
     }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .toast.show { opacity: 1; transform: translateY(0); }
 
-    @media (max-width: 1050px) {
+    @media (max-width: 1100px) {
       .app { grid-template-columns: 1fr; }
       .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
       .nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .topbar { grid-template-columns: 1fr; }
       .status { justify-self: start; }
-      .summary { grid-template-columns: 1fr; }
+      .summary, .layout-two, .db-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -360,13 +426,14 @@
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
-        <div class="mark">∞ HeartWork</div>
+        <div class="mark">Vercel + Supabase</div>
         <h1>配車マネージャ</h1>
       </div>
       <nav class="nav">
-        <button class="active" type="button" data-view="dashboard"><span>▦</span><span>ダッシュボード</span><span class="badge" id="badgeIssues">2</span></button>
-        <button type="button" data-view="schedule"><span>＋</span><span>予定登録</span></button>
-        <button type="button" data-view="check"><span>✓</span><span>自動チェック</span></button>
+        <button class="active" type="button" data-view="admin"><span>▦</span><span>管理者画面</span><span class="badge" id="badgeIssues">2</span></button>
+        <button type="button" data-view="driver"><span>▣</span><span>配送者入力</span></button>
+        <button type="button" data-view="check"><span>✓</span><span>自動照合</span></button>
+        <button type="button" data-view="flow"><span>◎</span><span>データ図解</span></button>
         <button type="button" data-view="report"><span>▤</span><span>帳票出力</span></button>
       </nav>
     </aside>
@@ -374,75 +441,268 @@
     <main class="workspace">
       <header class="topbar">
         <div class="selectbox">
-          <span id="viewTitle">ダッシュボード</span>
+          <span id="viewTitle">管理者画面</span>
           <span>▼</span>
         </div>
-        <div class="status" id="statusText">更新済み: 数秒前</div>
+        <div class="status" id="statusText">Supabase同期済み: 数秒前</div>
         <div class="top-actions">
-          <button class="tool" type="button" id="addRecord">＋ 予定を追加</button>
-          <button class="primary" type="button" id="publish">確認して確定(2)</button>
+          <button class="tool" type="button" id="addPlan">＋ 配車予定を作成</button>
+          <button class="primary" type="button" id="confirmAll">実績を確定(2)</button>
         </div>
       </header>
 
-      <div class="notice" id="notice">配車実績、出勤記録、予定差異を自動照合しています</div>
+      <div class="notice" id="notice">入力も確認もVercel画面で行い、データはSupabaseに保存します。スプレッドシートは日常入力には使いません。</div>
 
       <section class="content">
         <div class="summary">
           <div class="summary-card">
-            <div class="summary-title">▦ 予定</div>
+            <div class="summary-title">▦ 配車予定</div>
             <div class="summary-body">
-              <div class="mini"><strong id="planCount">4</strong><span>登録済み</span></div>
+              <div class="mini"><strong id="planCount">4</strong><span>予定</span></div>
               <div class="mini"><strong>23日</strong><span>稼働基準</span></div>
-              <div class="mini"><strong>21.8</strong><span>月末見込</span></div>
             </div>
           </div>
           <div class="summary-card">
-            <div class="summary-title">▤ 実績</div>
+            <div class="summary-title">▣ 配送者入力</div>
             <div class="summary-body">
-              <div class="mini"><strong id="fixedCount">2</strong><span>確定</span></div>
-              <div class="mini"><strong id="inputCount">4</strong><span>入力済み</span></div>
-              <div class="mini"><strong>5分</strong><span>確認時間</span></div>
+              <div class="mini"><strong id="inputCount">4</strong><span>実績入力</span></div>
+              <div class="mini"><strong id="attendanceCount">3</strong><span>出勤打刻</span></div>
             </div>
           </div>
           <div class="summary-card">
-            <div class="summary-title">✓ 自動チェック</div>
+            <div class="summary-title">✓ 自動照合</div>
             <div class="summary-body">
               <div class="mini"><strong id="issueCount">2</strong><span>要確認</span></div>
-              <div class="mini"><strong>18:00</strong><span>自動実行</span></div>
-              <div class="mini"><strong>4</strong><span>帳票</span></div>
+              <div class="mini"><strong id="fixedCount">2</strong><span>確定済み</span></div>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-title">◎ Supabase</div>
+            <div class="summary-body">
+              <div class="mini"><strong>9</strong><span>テーブル</span></div>
+              <div class="mini"><strong>正</strong><span>正規DB</span></div>
             </div>
           </div>
         </div>
 
-        <div class="table-shell">
-          <div class="table-actions">
-            <div class="action-group">
-              <button class="tool" type="button" id="runCheck">自動チェック</button>
-              <button class="tool" type="button" id="download">帳票を出力</button>
+        <div class="view active" id="admin">
+          <div class="layout-two">
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">管理者用 配車一覧</div>
+                <div class="actions">
+                  <button class="tool" type="button" id="runCheckAdmin">自動照合</button>
+                </div>
+              </div>
+              <div class="table-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>稼働日</th>
+                      <th>顧客</th>
+                      <th>車両</th>
+                      <th>予定ドライバー</th>
+                      <th>実績ドライバー</th>
+                      <th>出勤打刻</th>
+                      <th>照合結果</th>
+                      <th>月内稼働</th>
+                      <th>空き枠</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminRows"></tbody>
+                </table>
+              </div>
             </div>
-            <div class="action-group">
-              <button class="tool" type="button" id="finishAll">本日の確認完了</button>
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">配車予定作成</div>
+              </div>
+              <div class="panel-body">
+                <div class="form">
+                  <div class="field">
+                    <label for="planDate">稼働日</label>
+                    <input id="planDate" type="date" value="2026-05-12">
+                  </div>
+                  <div class="field">
+                    <label for="planCustomer">顧客</label>
+                    <select id="planCustomer">
+                      <option>サコス株式会社</option>
+                      <option>東海リース</option>
+                      <option>三和建材</option>
+                      <option>城南物流</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="planCar">車両</label>
+                    <select id="planCar">
+                      <option>車両 12</option>
+                      <option>車両 18</option>
+                      <option>車両 23</option>
+                      <option>車両 31</option>
+                      <option>車両 42</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="planDriver">予定ドライバー</label>
+                    <select id="planDriver">
+                      <option>佐藤 健</option>
+                      <option>鈴木 誠</option>
+                      <option>田中 亮</option>
+                      <option>高橋 直人</option>
+                    </select>
+                  </div>
+                  <button class="primary" type="button" id="createPlan">Supabaseへ予定保存</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="table-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>稼働日 ↕</th>
-                  <th>顧客</th>
-                  <th>車両</th>
-                  <th>予定ドライバー ↕</th>
-                  <th>実績ドライバー ↕</th>
-                  <th>出勤打刻</th>
-                  <th>照合結果</th>
-                  <th>月内稼働 ↕</th>
-                  <th>空き枠 ↕</th>
-                  <th>出力帳票</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody id="rows"></tbody>
-            </table>
+        </div>
+
+        <div class="view" id="driver">
+          <div class="layout-two">
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">配送者から見える今日の予定</div>
+              </div>
+              <div class="table-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>稼働日</th>
+                      <th>顧客</th>
+                      <th>車両</th>
+                      <th>予定ドライバー</th>
+                      <th>実績ドライバー</th>
+                      <th>出勤打刻</th>
+                      <th>状態</th>
+                    </tr>
+                  </thead>
+                  <tbody id="driverRows"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="phone">
+              <div class="phone-head">配送者入力</div>
+              <div class="phone-body">
+                <div class="form">
+                  <div class="field">
+                    <label for="driverTarget">対象予定</label>
+                    <select id="driverTarget"></select>
+                  </div>
+                  <div class="field">
+                    <label for="actualDriver">実績ドライバー</label>
+                    <select id="actualDriver">
+                      <option>佐藤 健</option>
+                      <option>鈴木 誠</option>
+                      <option>田中 亮</option>
+                      <option>高橋 直人</option>
+                      <option>未入力</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="attendance">出勤打刻</label>
+                    <select id="attendance">
+                      <option>打刻あり</option>
+                      <option>打刻なし</option>
+                    </select>
+                  </div>
+                  <button class="primary" type="button" id="submitActual">実績を送信</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="check">
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">Supabase上の予定・実績・出勤記録を照合</div>
+              <button class="primary" type="button" id="runCheck">照合を実行</button>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>エラー種別</th>
+                    <th>対象</th>
+                    <th>内容</th>
+                    <th>修正</th>
+                  </tr>
+                </thead>
+                <tbody id="checkRows"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="flow">
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">データの流れ</div>
+            </div>
+            <div class="panel-body">
+              <div class="flow">
+                <div class="flow-card vercel">
+                  <strong>管理者画面</strong>
+                  <span>配車予定を作成。エラー修正と実績確定もここで行う。</span>
+                </div>
+                <div class="flow-card vercel">
+                  <strong>配送者入力</strong>
+                  <span>スマホで出勤打刻、実績ドライバー、変更内容を送信。</span>
+                </div>
+                <div class="flow-card supabase">
+                  <strong>Supabase</strong>
+                  <span>顧客、車両、スタッフ、予定、実績、出勤を正規DBとして保存。</span>
+                </div>
+                <div class="flow-card supabase">
+                  <strong>自動照合</strong>
+                  <span>予定と実績、出勤記録を照合し、エラーだけを抽出。</span>
+                </div>
+                <div class="flow-card pdf">
+                  <strong>帳票出力</strong>
+                  <span>顧客軸配車表、車両軸配車表、勤怠表、週次レポートを出力。</span>
+                </div>
+              </div>
+              <div class="db-grid">
+                <div class="db-table"><strong>customers</strong><span>顧客マスタ</span></div>
+                <div class="db-table"><strong>vehicles</strong><span>車両マスタ</span></div>
+                <div class="db-table"><strong>staff</strong><span>スタッフマスタ</span></div>
+                <div class="db-table"><strong>dispatch_plans</strong><span>配車予定</span></div>
+                <div class="db-table"><strong>dispatch_actuals</strong><span>配車実績</span></div>
+                <div class="db-table"><strong>attendance_logs</strong><span>出勤記録</span></div>
+                <div class="db-table"><strong>reconciliation_errors</strong><span>照合エラー</span></div>
+                <div class="db-table"><strong>confirmed_results</strong><span>実績確定</span></div>
+                <div class="db-table"><strong>report_exports</strong><span>帳票出力履歴</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="report">
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">帳票出力</div>
+              <button class="primary" type="button" id="exportReports">PDFを出力</button>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>帳票</th>
+                    <th>内容</th>
+                    <th>出力元</th>
+                    <th>状態</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>顧客軸配車表</td><td>顧客ごとの車両・ドライバー</td><td>Supabase</td><td><span class="pill ok">出力可能</span></td></tr>
+                  <tr><td>車両軸配車表</td><td>車両ごとの顧客・ドライバー・空き枠</td><td>Supabase</td><td><span class="pill ok">出力可能</span></td></tr>
+                  <tr><td>勤怠表レポート</td><td>出勤打刻と配車実績の一覧</td><td>Supabase</td><td><span class="pill ok">出力可能</span></td></tr>
+                  <tr><td>週次経営レポート</td><td>23日稼働見込みと要確認件数</td><td>Supabase</td><td><span class="pill ok">出力可能</span></td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -453,40 +713,35 @@
 
   <script>
     const records = [
-      { date: "2026/05/11", customer: "サコス株式会社", car: "車両 12", plan: "佐藤 健", actual: "佐藤 健", attendance: "打刻あり", fixed: true, runDays: 23.4, openSlots: 0, reports: "顧客軸・車両軸" },
-      { date: "2026/05/11", customer: "東海リース", car: "車両 18", plan: "鈴木 誠", actual: "鈴木 誠", attendance: "打刻なし", fixed: false, runDays: 20.8, openSlots: 2, reports: "勤怠表" },
-      { date: "2026/05/11", customer: "三和建材", car: "車両 23", plan: "田中 亮", actual: "高橋 直人", attendance: "打刻あり", fixed: false, runDays: 22.1, openSlots: 1, reports: "顧客軸" },
-      { date: "2026/05/11", customer: "城南物流", car: "車両 31", plan: "高橋 直人", actual: "高橋 直人", attendance: "打刻あり", fixed: true, runDays: 21.0, openSlots: 2, reports: "週次経営" }
+      { date: "2026/05/11", customer: "サコス株式会社", car: "車両 12", plan: "佐藤 健", actual: "佐藤 健", attendance: "打刻あり", fixed: true, runDays: 23.4, openSlots: 0 },
+      { date: "2026/05/11", customer: "東海リース", car: "車両 18", plan: "鈴木 誠", actual: "鈴木 誠", attendance: "打刻なし", fixed: false, runDays: 20.8, openSlots: 2 },
+      { date: "2026/05/11", customer: "三和建材", car: "車両 23", plan: "田中 亮", actual: "高橋 直人", attendance: "打刻あり", fixed: false, runDays: 22.1, openSlots: 1 },
+      { date: "2026/05/11", customer: "城南物流", car: "車両 31", plan: "高橋 直人", actual: "高橋 直人", attendance: "打刻あり", fixed: true, runDays: 21.0, openSlots: 2 }
     ];
 
-    let view = "dashboard";
+    let view = "admin";
 
     const viewConfig = {
-      dashboard: ["ダッシュボード", "配車実績、出勤記録、予定差異を自動照合しています"],
-      schedule: ["予定登録", "追加予定と未入力の配車を表示しています"],
-      check: ["自動チェック", "打刻漏れと予定差異だけを表示しています"],
-      report: ["帳票出力", "確定済みの実績と帳票出力対象を表示しています"]
+      admin: ["管理者画面", "管理者はVercel画面で予定作成、エラー修正、実績確定を行います"],
+      driver: ["配送者入力", "配送者はスマホ画面から出勤打刻と実績を入力します"],
+      check: ["自動照合", "Supabase上の予定・実績・出勤を照合し、不一致だけを表示します"],
+      flow: ["データ図解", "入力画面とSupabaseの役割を分けて表示しています"],
+      report: ["帳票出力", "Supabaseの確定データからPDF帳票を出力します"]
     };
 
     function issue(record) {
       if (record.fixed) return null;
-      if (record.attendance === "打刻なし") return "出勤打刻なし";
-      if (record.plan !== record.actual) return "予定差異";
-      return "確認待ち";
+      if (record.attendance === "打刻なし") return ["出勤打刻なし", `${record.actual}さんの出勤記録がありません`];
+      if (record.plan !== record.actual) return ["予定差異", `予定 ${record.plan} / 実績 ${record.actual}`];
+      if (record.actual === "未入力") return ["実績未入力", "配送者の実績入力が未完了です"];
+      return ["確認待ち", "本社確認が必要です"];
     }
 
     function status(record) {
-      const i = issue(record);
-      if (!i) return ["確定", "ok"];
-      if (i === "確認待ち") return ["確認待ち", "warn"];
-      return [i, "err"];
-    }
-
-    function visibleRecords() {
-      if (view === "schedule") return records.filter(record => !record.fixed || record.actual === "未入力");
-      if (view === "check") return records.filter(record => issue(record));
-      if (view === "report") return records.filter(record => record.fixed);
-      return records;
+      const item = issue(record);
+      if (!item) return ["実績確定", "ok"];
+      if (item[0] === "確認待ち") return ["確認待ち", "warn"];
+      return [item[0], "err"];
     }
 
     function toast(text) {
@@ -496,10 +751,8 @@
       window.setTimeout(() => el.classList.remove("show"), 1300);
     }
 
-    function render() {
-      const list = visibleRecords();
-      document.getElementById("rows").innerHTML = list.length ? list.map(record => {
-        const index = records.indexOf(record);
+    function renderAdminRows() {
+      document.getElementById("adminRows").innerHTML = records.map((record, index) => {
         const [label, cls] = status(record);
         return `
           <tr>
@@ -512,21 +765,10 @@
             <td><span class="pill ${cls}">${label}</span></td>
             <td>${record.runDays.toFixed(1)}日</td>
             <td>${record.openSlots}枠</td>
-            <td>${record.reports}</td>
             <td><button class="row-action" data-fix="${index}" type="button">修正して確定</button></td>
           </tr>
         `;
-      }).join("") : `<tr><td colspan="11"><div class="empty">表示できるデータはありません</div></td></tr>`;
-
-      const issues = records.filter(record => issue(record));
-      document.getElementById("planCount").textContent = records.length;
-      document.getElementById("inputCount").textContent = records.filter(record => record.actual !== "未入力").length;
-      document.getElementById("fixedCount").textContent = records.filter(record => record.fixed).length;
-      document.getElementById("issueCount").textContent = issues.length;
-      document.getElementById("badgeIssues").textContent = issues.length;
-      document.getElementById("publish").textContent = `確認して確定(${issues.length})`;
-      document.getElementById("viewTitle").textContent = viewConfig[view][0];
-      document.getElementById("notice").textContent = viewConfig[view][1];
+      }).join("");
 
       document.querySelectorAll("[data-fix]").forEach(button => {
         button.addEventListener("click", () => {
@@ -535,9 +777,62 @@
           record.attendance = "打刻あり";
           record.fixed = true;
           render();
-          toast("1件を確定しました");
+          toast("Supabaseへ確定保存しました");
         });
       });
+    }
+
+    function renderDriverRows() {
+      document.getElementById("driverRows").innerHTML = records.map(record => {
+        const [label, cls] = status(record);
+        return `
+          <tr>
+            <td>${record.date}</td>
+            <td>${record.customer}</td>
+            <td>${record.car}</td>
+            <td>${record.plan}</td>
+            <td>${record.actual}</td>
+            <td>${record.attendance}</td>
+            <td><span class="pill ${cls}">${label}</span></td>
+          </tr>
+        `;
+      }).join("");
+
+      document.getElementById("driverTarget").innerHTML = records.map((record, index) => `
+        <option value="${index}">${record.date} / ${record.customer} / ${record.car}</option>
+      `).join("");
+    }
+
+    function renderCheckRows() {
+      const issues = records.map((record, index) => ({ record, index, item: issue(record) })).filter(row => row.item);
+      document.getElementById("checkRows").innerHTML = issues.length ? issues.map(row => `
+        <tr>
+          <td><span class="pill err">${row.item[0]}</span></td>
+          <td>${row.record.customer} / ${row.record.car}</td>
+          <td>${row.item[1]}</td>
+          <td><button class="row-action" data-fix="${row.index}" type="button">修正して確定</button></td>
+        </tr>
+      `).join("") : `<tr><td colspan="4"><div class="empty">不一致はありません</div></td></tr>`;
+    }
+
+    function renderStats() {
+      const issues = records.filter(record => issue(record));
+      document.getElementById("planCount").textContent = records.length;
+      document.getElementById("inputCount").textContent = records.filter(record => record.actual !== "未入力").length;
+      document.getElementById("attendanceCount").textContent = records.filter(record => record.attendance === "打刻あり").length;
+      document.getElementById("fixedCount").textContent = records.filter(record => record.fixed).length;
+      document.getElementById("issueCount").textContent = issues.length;
+      document.getElementById("badgeIssues").textContent = issues.length;
+      document.getElementById("confirmAll").textContent = `実績を確定(${issues.length})`;
+      document.getElementById("viewTitle").textContent = viewConfig[view][0];
+      document.getElementById("notice").textContent = viewConfig[view][1];
+    }
+
+    function render() {
+      renderAdminRows();
+      renderDriverRows();
+      renderCheckRows();
+      renderStats();
     }
 
     function setView(nextView) {
@@ -545,49 +840,67 @@
       document.querySelectorAll("[data-view]").forEach(button => {
         button.classList.toggle("active", button.dataset.view === view);
       });
-      render();
+      document.querySelectorAll(".view").forEach(section => {
+        section.classList.toggle("active", section.id === view);
+      });
+      renderStats();
     }
 
     document.querySelectorAll("[data-view]").forEach(button => {
       button.addEventListener("click", () => setView(button.dataset.view));
     });
 
-    document.getElementById("addRecord").addEventListener("click", () => {
+    document.getElementById("addPlan").addEventListener("click", () => {
+      setView("admin");
+      document.getElementById("planDate").focus();
+      toast("右側で配車予定を作成できます");
+    });
+
+    document.getElementById("createPlan").addEventListener("click", () => {
       records.unshift({
-        date: "2026/05/12",
-        customer: "追加顧客",
-        car: "車両 42",
-        plan: "佐藤 健",
+        date: document.getElementById("planDate").value.replaceAll("-", "/"),
+        customer: document.getElementById("planCustomer").value,
+        car: document.getElementById("planCar").value,
+        plan: document.getElementById("planDriver").value,
         actual: "未入力",
         attendance: "打刻なし",
         fixed: false,
         runDays: 18.5,
-        openSlots: 4,
-        reports: "未確定"
+        openSlots: 4
       });
-      setView("schedule");
-      toast("予定を追加しました");
+      render();
+      toast("配車予定をSupabaseへ保存しました");
     });
 
-    document.getElementById("runCheck").addEventListener("click", () => {
-      setView("check");
-      toast("自動チェックを実行しました");
+    document.getElementById("submitActual").addEventListener("click", () => {
+      const record = records[Number(document.getElementById("driverTarget").value)];
+      record.actual = document.getElementById("actualDriver").value;
+      record.attendance = document.getElementById("attendance").value;
+      record.fixed = false;
+      render();
+      toast("配送者入力をSupabaseへ保存しました");
     });
 
-    document.getElementById("download").addEventListener("click", () => toast("顧客軸・車両軸・勤怠表を出力しました"));
-
-    function finishAll() {
+    function confirmAll() {
       records.forEach(record => {
         record.actual = record.plan;
         record.attendance = "打刻あり";
         record.fixed = true;
       });
       render();
-      toast("すべて確定しました");
+      toast("全件をSupabaseへ確定保存しました");
     }
 
-    document.getElementById("publish").addEventListener("click", finishAll);
-    document.getElementById("finishAll").addEventListener("click", finishAll);
+    document.getElementById("confirmAll").addEventListener("click", confirmAll);
+    document.getElementById("runCheck").addEventListener("click", () => {
+      render();
+      toast("Supabase上のデータを照合しました");
+    });
+    document.getElementById("runCheckAdmin").addEventListener("click", () => {
+      setView("check");
+      toast("自動照合を実行しました");
+    });
+    document.getElementById("exportReports").addEventListener("click", () => toast("PDF帳票を出力しました"));
 
     render();
   </script>
