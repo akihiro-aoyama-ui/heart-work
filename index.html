@@ -21,8 +21,6 @@
       --amber: #a96800;
       --amber-soft: #fff7df;
       --row: #f7f8fa;
-      --supabase: #3ecf8e;
-      --vercel: #111827;
     }
 
     * { box-sizing: border-box; }
@@ -340,58 +338,6 @@
 
     .phone-body { padding: 14px; }
 
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(140px, 1fr));
-      gap: 10px;
-      overflow-x: auto;
-    }
-
-    .flow-card {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-      min-height: 126px;
-      padding: 14px;
-      display: grid;
-      align-content: start;
-      gap: 8px;
-      position: relative;
-    }
-
-    .flow-card:not(:last-child)::after {
-      content: "→";
-      position: absolute;
-      right: -16px;
-      top: 45%;
-      color: var(--muted);
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .flow-card strong { font-size: 15px; }
-    .flow-card span { color: var(--muted); font-size: 12px; }
-    .flow-card.vercel { border-top: 5px solid var(--vercel); }
-    .flow-card.supabase { border-top: 5px solid var(--supabase); }
-    .flow-card.pdf { border-top: 5px solid var(--blue); }
-
-    .db-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .db-table {
-      border: 1px solid var(--soft-line);
-      border-radius: 7px;
-      background: #fff;
-      padding: 10px;
-    }
-
-    .db-table strong { display: block; margin-bottom: 6px; }
-    .db-table span { color: var(--muted); font-size: 12px; display: block; }
-
     .empty { padding: 28px; color: var(--muted); font-weight: 700; }
 
     .toast {
@@ -418,7 +364,7 @@
       .nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .topbar { grid-template-columns: 1fr; }
       .status { justify-self: start; }
-      .summary, .layout-two, .db-grid { grid-template-columns: 1fr; }
+      .summary, .layout-two { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -426,14 +372,13 @@
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
-        <div class="mark">Vercel + Supabase</div>
+        <div class="mark">HeartWork</div>
         <h1>配車マネージャ</h1>
       </div>
       <nav class="nav">
         <button class="active" type="button" data-view="admin"><span>▦</span><span>管理者画面</span><span class="badge" id="badgeIssues">2</span></button>
         <button type="button" data-view="driver"><span>▣</span><span>配送者入力</span></button>
         <button type="button" data-view="check"><span>✓</span><span>自動照合</span></button>
-        <button type="button" data-view="flow"><span>◎</span><span>データ図解</span></button>
         <button type="button" data-view="report"><span>▤</span><span>帳票出力</span></button>
       </nav>
     </aside>
@@ -444,14 +389,14 @@
           <span id="viewTitle">管理者画面</span>
           <span>▼</span>
         </div>
-        <div class="status" id="statusText">Supabase同期済み: 数秒前</div>
+        <div class="status" id="statusText">保存済み: 数秒前</div>
         <div class="top-actions">
           <button class="tool" type="button" id="addPlan">＋ 配車予定を作成</button>
           <button class="primary" type="button" id="confirmAll">実績を確定(2)</button>
         </div>
       </header>
 
-      <div class="notice" id="notice">入力も確認もVercel画面で行い、データはSupabaseに保存します。スプレッドシートは日常入力には使いません。</div>
+      <div class="notice" id="notice">管理者と配送者がそれぞれ専用画面で入力し、予定・実績・出勤を一元管理します。</div>
 
       <section class="content">
         <div class="summary">
@@ -477,10 +422,10 @@
             </div>
           </div>
           <div class="summary-card">
-            <div class="summary-title">◎ Supabase</div>
+            <div class="summary-title">◎ データ管理</div>
             <div class="summary-body">
-              <div class="mini"><strong>9</strong><span>テーブル</span></div>
-              <div class="mini"><strong>正</strong><span>正規DB</span></div>
+              <div class="mini"><strong>一元</strong><span>予定・実績</span></div>
+              <div class="mini"><strong>履歴</strong><span>修正記録</span></div>
             </div>
           </div>
         </div>
@@ -552,7 +497,7 @@
                       <option>高橋 直人</option>
                     </select>
                   </div>
-                  <button class="primary" type="button" id="createPlan">Supabaseへ予定保存</button>
+                  <button class="primary" type="button" id="createPlan">配車予定を保存</button>
                 </div>
               </div>
             </div>
@@ -617,7 +562,7 @@
         <div class="view" id="check">
           <div class="panel">
             <div class="panel-head">
-              <div class="panel-title">Supabase上の予定・実績・出勤記録を照合</div>
+              <div class="panel-title">予定・実績・出勤記録を照合</div>
               <button class="primary" type="button" id="runCheck">照合を実行</button>
             </div>
             <div class="table-scroll">
@@ -632,49 +577,6 @@
                 </thead>
                 <tbody id="checkRows"></tbody>
               </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="view" id="flow">
-          <div class="panel">
-            <div class="panel-head">
-              <div class="panel-title">データの流れ</div>
-            </div>
-            <div class="panel-body">
-              <div class="flow">
-                <div class="flow-card vercel">
-                  <strong>管理者画面</strong>
-                  <span>配車予定を作成。エラー修正と実績確定もここで行う。</span>
-                </div>
-                <div class="flow-card vercel">
-                  <strong>配送者入力</strong>
-                  <span>スマホで出勤打刻、実績ドライバー、変更内容を送信。</span>
-                </div>
-                <div class="flow-card supabase">
-                  <strong>Supabase</strong>
-                  <span>顧客、車両、スタッフ、予定、実績、出勤を正規DBとして保存。</span>
-                </div>
-                <div class="flow-card supabase">
-                  <strong>自動照合</strong>
-                  <span>予定と実績、出勤記録を照合し、エラーだけを抽出。</span>
-                </div>
-                <div class="flow-card pdf">
-                  <strong>帳票出力</strong>
-                  <span>顧客軸配車表、車両軸配車表、勤怠表、週次レポートを出力。</span>
-                </div>
-              </div>
-              <div class="db-grid">
-                <div class="db-table"><strong>customers</strong><span>顧客マスタ</span></div>
-                <div class="db-table"><strong>vehicles</strong><span>車両マスタ</span></div>
-                <div class="db-table"><strong>staff</strong><span>スタッフマスタ</span></div>
-                <div class="db-table"><strong>dispatch_plans</strong><span>配車予定</span></div>
-                <div class="db-table"><strong>dispatch_actuals</strong><span>配車実績</span></div>
-                <div class="db-table"><strong>attendance_logs</strong><span>出勤記録</span></div>
-                <div class="db-table"><strong>reconciliation_errors</strong><span>照合エラー</span></div>
-                <div class="db-table"><strong>confirmed_results</strong><span>実績確定</span></div>
-                <div class="db-table"><strong>report_exports</strong><span>帳票出力履歴</span></div>
-              </div>
             </div>
           </div>
         </div>
@@ -696,10 +598,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>顧客軸配車表</td><td>顧客ごとの車両・ドライバー</td><td>Supabase</td><td><span class="pill ok">出力可能</span></td></tr>
-                  <tr><td>車両軸配車表</td><td>車両ごとの顧客・ドライバー・空き枠</td><td>Supabase</td><td><span class="pill ok">出力可能</span></td></tr>
-                  <tr><td>勤怠表レポート</td><td>出勤打刻と配車実績の一覧</td><td>Supabase</td><td><span class="pill ok">出力可能</span></td></tr>
-                  <tr><td>週次経営レポート</td><td>23日稼働見込みと要確認件数</td><td>Supabase</td><td><span class="pill ok">出力可能</span></td></tr>
+                  <tr><td>顧客軸配車表</td><td>顧客ごとの車両・ドライバー</td><td>確定データ</td><td><span class="pill ok">出力可能</span></td></tr>
+                  <tr><td>車両軸配車表</td><td>車両ごとの顧客・ドライバー・空き枠</td><td>確定データ</td><td><span class="pill ok">出力可能</span></td></tr>
+                  <tr><td>勤怠表レポート</td><td>出勤打刻と配車実績の一覧</td><td>確定データ</td><td><span class="pill ok">出力可能</span></td></tr>
+                  <tr><td>週次経営レポート</td><td>23日稼働見込みと要確認件数</td><td>確定データ</td><td><span class="pill ok">出力可能</span></td></tr>
                 </tbody>
               </table>
             </div>
@@ -722,11 +624,10 @@
     let view = "admin";
 
     const viewConfig = {
-      admin: ["管理者画面", "管理者はVercel画面で予定作成、エラー修正、実績確定を行います"],
+      admin: ["管理者画面", "管理者はこの画面で予定作成、エラー修正、実績確定を行います"],
       driver: ["配送者入力", "配送者はスマホ画面から出勤打刻と実績を入力します"],
-      check: ["自動照合", "Supabase上の予定・実績・出勤を照合し、不一致だけを表示します"],
-      flow: ["データ図解", "入力画面とSupabaseの役割を分けて表示しています"],
-      report: ["帳票出力", "Supabaseの確定データからPDF帳票を出力します"]
+      check: ["自動照合", "保存済みの予定・実績・出勤を照合し、不一致だけを表示します"],
+      report: ["帳票出力", "確定データからPDF帳票を出力します"]
     };
 
     function issue(record) {
@@ -777,7 +678,7 @@
           record.attendance = "打刻あり";
           record.fixed = true;
           render();
-          toast("Supabaseへ確定保存しました");
+          toast("実績を確定保存しました");
         });
       });
     }
@@ -869,7 +770,7 @@
         openSlots: 4
       });
       render();
-      toast("配車予定をSupabaseへ保存しました");
+      toast("配車予定を保存しました");
     });
 
     document.getElementById("submitActual").addEventListener("click", () => {
@@ -878,7 +779,7 @@
       record.attendance = document.getElementById("attendance").value;
       record.fixed = false;
       render();
-      toast("配送者入力をSupabaseへ保存しました");
+      toast("配送者入力を保存しました");
     });
 
     function confirmAll() {
@@ -888,13 +789,13 @@
         record.fixed = true;
       });
       render();
-      toast("全件をSupabaseへ確定保存しました");
+      toast("全件を確定保存しました");
     }
 
     document.getElementById("confirmAll").addEventListener("click", confirmAll);
     document.getElementById("runCheck").addEventListener("click", () => {
       render();
-      toast("Supabase上のデータを照合しました");
+      toast("保存済みデータを照合しました");
     });
     document.getElementById("runCheckAdmin").addEventListener("click", () => {
       setView("check");
