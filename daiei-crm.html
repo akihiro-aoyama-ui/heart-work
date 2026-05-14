@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大栄電通 営業支援CRM</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --ink: #202b36;
+      --muted: #657380;
+      --line: #d8e0e8;
+      --soft: #edf1f5;
+      --blue: #1767ce;
+      --blue-soft: #e7f0ff;
+      --green: #0f7a56;
+      --green-soft: #e5f6ed;
+      --amber: #a35f00;
+      --amber-soft: #fff4dc;
+      --red: #bb2937;
+      --red-soft: #ffe9ed;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+    }
+    .side {
+      background: #152232;
+      color: #fff;
+      padding: 18px 14px;
+    }
+    .brand {
+      border-bottom: 1px solid rgba(255,255,255,.16);
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+    }
+    .brand b { display: block; font-size: 13px; color: #a9bed5; margin-bottom: 8px; }
+    .brand h1 { margin: 0; font-size: 23px; line-height: 1.2; letter-spacing: 0; }
+    .nav { display: grid; gap: 8px; }
+    .nav button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: #dce7f2;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 10px;
+      font-weight: 700;
+      text-align: left;
+    }
+    .nav button.active { background: rgba(255,255,255,.13); color: #fff; }
+    .side-note {
+      margin-top: 22px;
+      border-top: 1px solid rgba(255,255,255,.16);
+      padding-top: 14px;
+      color: #bbcbdb;
+      font-size: 12px;
+    }
+
+    .main {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr);
+    }
+    .top {
+      min-height: 62px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 18px;
+    }
+    .title strong { display: block; font-size: 18px; }
+    .title span { color: var(--muted); font-size: 12px; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .btn {
+      min-height: 38px;
+      border: 1px solid #b9c6d4;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      padding: 0 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+    .btn.primary { border-color: var(--blue); background: var(--blue); color: #fff; }
+    .btn.danger { border-color: #e6b6be; color: var(--red); }
+    .notice {
+      margin: 12px 18px 0;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 7px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+    .notice b { color: var(--ink); }
+
+    .content {
+      min-height: 0;
+      padding: 12px 18px 18px;
+      overflow: auto;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .metric {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      min-height: 86px;
+    }
+    .metric span { display: block; color: var(--muted); font-size: 12px; }
+    .metric strong { display: block; font-size: 27px; line-height: 1.1; margin-top: 4px; }
+
+    .filters {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) 180px 180px 160px;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #c6d1dd;
+      background: #fff;
+      color: var(--ink);
+      border-radius: 6px;
+      padding: 9px 10px;
+      min-height: 38px;
+    }
+    textarea { min-height: 86px; resize: vertical; }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 370px;
+      gap: 12px;
+      align-items: start;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .panel-head {
+      min-height: 46px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 12px;
+    }
+    .panel-head strong { font-size: 15px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th, td {
+      border-bottom: 1px solid var(--soft);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      background: #f9fbfd;
+      font-weight: 800;
+    }
+    tr:hover td { background: #fbfdff; }
+    .company-cell strong { display: block; font-size: 15px; }
+    .company-cell span { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border-radius: 999px;
+      padding: 0 9px;
+      font-size: 12px;
+      font-weight: 800;
+      background: var(--soft);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .tag.blue { background: var(--blue-soft); color: var(--blue); }
+    .tag.green { background: var(--green-soft); color: var(--green); }
+    .tag.amber { background: var(--amber-soft); color: var(--amber); }
+    .tag.red { background: var(--red-soft); color: var(--red); }
+    .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .icon-btn {
+      min-height: 30px;
+      border: 1px solid #c6d1dd;
+      background: #fff;
+      border-radius: 5px;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .form {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+    .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    label span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .activity-list {
+      padding: 10px 12px 12px;
+      display: grid;
+      gap: 8px;
+      max-height: 330px;
+      overflow: auto;
+    }
+    .activity {
+      border: 1px solid var(--soft);
+      border-radius: 7px;
+      padding: 9px;
+      background: #fbfcfe;
+    }
+    .activity b { display: block; }
+    .activity span { display: block; color: var(--muted); font-size: 12px; }
+
+    .empty {
+      padding: 28px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .setup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 24, 36, .42);
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 10;
+    }
+    .setup.open { display: flex; }
+    .dialog {
+      width: min(680px, 100%);
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 54px rgba(0,0,0,.18);
+      overflow: hidden;
+    }
+    .dialog-body { padding: 14px; display: grid; gap: 10px; }
+    .help {
+      background: #f8fafc;
+      border: 1px solid var(--soft);
+      border-radius: 7px;
+      padding: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
+      .side { position: static; }
+      .workspace, .metrics, .filters { grid-template-columns: 1fr; }
+      .top { grid-template-columns: 1fr; }
+      .actions { justify-content: flex-start; }
+      th:nth-child(3), td:nth-child(3),
+      th:nth-child(5), td:nth-child(5) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="side">
+      <div class="brand">
+        <b>大栄電通 × クリエスタ</b>
+        <h1>営業支援CRM</h1>
+      </div>
+      <nav class="nav">
+        <button class="active" type="button">案件一覧</button>
+        <button type="button" id="showSetupSide">Supabase接続</button>
+      </nav>
+      <div class="side-note">
+        Google Workspace、AI活用、伴走支援、システム構築の商談を一箇所で見るための管理画面です。
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="top">
+        <div class="title">
+          <strong>顧客管理・営業支援ボード</strong>
+          <span>誰に営業しているか、どの支援に進むか、次に誰が動くかを管理</span>
+        </div>
+        <div class="actions">
+          <button class="btn" type="button" id="showSetup">接続設定</button>
+          <button class="btn" type="button" id="signInBtn">ログイン</button>
+          <button class="btn primary" type="button" id="newBtn">新規登録</button>
+        </div>
+      </header>
+
+      <div class="notice" id="notice">
+        <span><b>デモモード</b> Supabase未接続でも動きます。接続後はデータベースへ保存されます。</span>
+        <button class="icon-btn" type="button" id="reloadBtn">再読込</button>
+      </div>
+
+      <section class="content">
+        <div class="metrics">
+          <div class="metric"><span>登録顧客</span><strong id="metricCompanies">0</strong></div>
+          <div class="metric"><span>提案準備・提案済み</span><strong id="metricProposal">0</strong></div>
+          <div class="metric"><span>伴走支援候補</span><strong id="metricSupport">0</strong></div>
+          <div class="metric"><span>次回対応あり</span><strong id="metricNext">0</strong></div>
+        </div>
+
+        <div class="filters">
+          <input id="searchInput" type="search" placeholder="会社名、課題、担当者で検索">
+          <select id="stageFilter">
+            <option value="">全ステータス</option>
+            <option>ヒアリング前</option>
+            <option>課題確認中</option>
+            <option>提案準備</option>
+            <option>提案済み</option>
+            <option>受注</option>
+            <option>保留</option>
+            <option>失注</option>
+          </select>
+          <select id="typeFilter">
+            <option value="">全支援タイプ</option>
+            <option>伴走支援</option>
+            <option>システム構築</option>
+            <option>Google Workspace導入</option>
+            <option>スポット開発</option>
+            <option>未分類</option>
+          </select>
+          <select id="priorityFilter">
+            <option value="">全優先度</option>
+            <option>高</option>
+            <option>中</option>
+            <option>低</option>
+          </select>
+        </div>
+
+        <div class="workspace">
+          <section class="panel">
+            <div class="panel-head">
+              <strong>案件一覧</strong>
+              <span id="resultCount" class="tag">0件</span>
+            </div>
+            <div style="overflow:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:24%;">顧客</th>
+                    <th style="width:15%;">支援</th>
+                    <th style="width:14%;">状態</th>
+                    <th>次の動き</th>
+                    <th style="width:16%;">担当</th>
+                    <th style="width:100px;">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="companyRows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <aside class="panel">
+            <div class="panel-head">
+              <strong id="formTitle">新規登録</strong>
+              <button class="icon-btn" type="button" id="clearBtn">クリア</button>
+            </div>
+            <form class="form" id="companyForm">
+              <input type="hidden" id="companyId">
+              <label><span>会社名</span><input id="companyName" required placeholder="例：株式会社〇〇"></label>
+              <div class="grid2">
+                <label><span>業種</span><input id="industry" placeholder="製造業"></label>
+                <label><span>エリア</span><input id="area" placeholder="久留米市"></label>
+              </div>
+              <label><span>いま困っていること</span><textarea id="pain" placeholder="紙、Excel、ファイル共有、営業管理など"></textarea></label>
+              <div class="grid2">
+                <label><span>支援タイプ</span><select id="supportType"><option>伴走支援</option><option>システム構築</option><option>Google Workspace導入</option><option>スポット開発</option><option>未分類</option></select></label>
+                <label><span>状態</span><select id="stage"><option>ヒアリング前</option><option>課題確認中</option><option>提案準備</option><option>提案済み</option><option>受注</option><option>保留</option><option>失注</option></select></label>
+              </div>
+              <div class="grid2">
+                <label><span>大栄電通担当</span><input id="daieiOwner" placeholder="担当者名"></label>
+                <label><span>クリエスタ担当</span><input id="creastaOwner" placeholder="担当者名"></label>
+              </div>
+              <div class="grid2">
+                <label><span>優先度</span><select id="priority"><option>高</option><option selected>中</option><option>低</option></select></label>
+                <label><span>次回対応日</span><input id="nextActionDate" type="date"></label>
+              </div>
+              <label><span>次の動き</span><input id="nextAction" placeholder="例：課題ヒアリングの日程調整"></label>
+              <div class="grid2">
+                <label><span>初期見込</span><input id="estimatedAmount" type="number" min="0" step="10000" value="0"></label>
+                <label><span>月額見込</span><input id="monthlyAmount" type="number" min="0" step="10000" value="0"></label>
+              </div>
+              <label><span>メモ</span><textarea id="memo" placeholder="商談背景、紹介経路、提案メモ"></textarea></label>
+              <button class="btn primary" type="submit">保存</button>
+            </form>
+
+            <div class="panel-head">
+              <strong>活動メモ</strong>
+            </div>
+            <form class="form" id="activityForm">
+              <div class="grid2">
+                <label><span>種別</span><select id="activityType"><option>訪問</option><option>電話</option><option>メール</option><option>オンラインMTG</option><option>提案</option><option>メモ</option></select></label>
+                <label><span>日付</span><input id="activityDate" type="date"></label>
+              </div>
+              <label><span>内容</span><input id="activitySummary" placeholder="例：初回ヒアリング実施"></label>
+              <button class="btn" type="submit">活動を追加</button>
+            </form>
+            <div class="activity-list" id="activityList"></div>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="setup" id="setupModal">
+    <div class="dialog">
+      <div class="panel-head">
+        <strong>Supabase接続設定</strong>
+        <button class="icon-btn" type="button" id="closeSetup">閉じる</button>
+      </div>
+      <div class="dialog-body">
+        <div class="help">
+          1. <code>supabase/crm_schema.sql</code> をSupabase SQL Editorで実行<br>
+          2. Authenticationでメールログインを有効化<br>
+          3. Project URL と publishable / anon key を入れて保存
+        </div>
+        <label><span>Project URL</span><input id="supabaseUrl" placeholder="https://xxxx.supabase.co"></label>
+        <label><span>Anon / publishable key</span><input id="supabaseKey" placeholder="eyJ..."></label>
+        <label><span>ログインメール</span><input id="loginEmail" type="email" placeholder="name@example.com"></label>
+        <div class="actions">
+          <button class="btn primary" type="button" id="saveConfig">設定を保存</button>
+          <button class="btn" type="button" id="sendMagicLink">ログインメール送信</button>
+          <button class="btn danger" type="button" id="resetConfig">設定削除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.75.1';
+
+    const STORAGE_KEY = 'daiei-crm-demo-data';
+    const CONFIG_KEY = 'daiei-crm-supabase-config';
+    const today = new Date().toISOString().slice(0, 10);
+    const sampleCompanies = [
+      {
+        id: crypto.randomUUID(),
+        company_name: 'サンプル製造株式会社',
+        industry: '製造業',
+        area: '久留米市',
+        pain: '見積書、図面、問い合わせ履歴が担当者ごとに分散している',
+        support_type: '伴走支援',
+        stage: '課題確認中',
+        priority: '高',
+        daiei_owner: '大栄電通 担当A',
+        creasta_owner: 'クリエスタ 青山',
+        next_action: '業務フローを30分ヒアリングする',
+        next_action_date: addDays(7),
+        estimated_amount: 300000,
+        monthly_amount: 120000,
+        memo: '共有ドライブ設計とAI活用の伴走候補'
+      },
+      {
+        id: crypto.randomUUID(),
+        company_name: 'サンプル運送株式会社',
+        industry: '運送業',
+        area: '鳥栖市',
+        pain: '紙とExcelの運行予定を毎日転記している',
+        support_type: 'システム構築',
+        stage: '提案準備',
+        priority: '中',
+        daiei_owner: '大栄電通 担当B',
+        creasta_owner: 'クリエスタ 青山',
+        next_action: 'デモ画面を見せて必要項目を確認する',
+        next_action_date: addDays(3),
+        estimated_amount: 650000,
+        monthly_amount: 0,
+        memo: 'GAS、スプレッドシート、AI整理のスポット開発候補'
+      }
+    ];
+
+    const state = {
+      companies: [],
+      activities: [],
+      selectedId: '',
+      supabase: null,
+      session: null,
+      connected: false
+    };
+
+    const el = (id) => document.getElementById(id);
+    const fields = {
+      id: el('companyId'),
+      company_name: el('companyName'),
+      industry: el('industry'),
+      area: el('area'),
+      pain: el('pain'),
+      support_type: el('supportType'),
+      stage: el('stage'),
+      priority: el('priority'),
+      daiei_owner: el('daieiOwner'),
+      creasta_owner: el('creastaOwner'),
+      next_action: el('nextAction'),
+      next_action_date: el('nextActionDate'),
+      estimated_amount: el('estimatedAmount'),
+      monthly_amount: el('monthlyAmount'),
+      memo: el('memo')
+    };
+
+    bootstrap();
+
+    async function bootstrap() {
+      el('activityDate').value = today;
+      loadConfig();
+      bindEvents();
+      await loadData();
+      render();
+    }
+
+    function bindEvents() {
+      ['searchInput', 'stageFilter', 'typeFilter', 'priorityFilter'].forEach((id) => {
+        el(id).addEventListener('input', render);
+      });
+      el('newBtn').addEventListener('click', clearForm);
+      el('clearBtn').addEventListener('click', clearForm);
+      el('reloadBtn').addEventListener('click', loadAndRender);
+      el('companyForm').addEventListener('submit', saveCompany);
+      el('activityForm').addEventListener('submit', saveActivity);
+      el('showSetup').addEventListener('click', openSetup);
+      el('showSetupSide').addEventListener('click', openSetup);
+      el('closeSetup').addEventListener('click', closeSetup);
+      el('saveConfig').addEventListener('click', saveConfig);
+      el('resetConfig').addEventListener('click', resetConfig);
+      el('sendMagicLink').addEventListener('click', sendMagicLink);
+      el('signInBtn').addEventListener('click', openSetup);
+    }
+
+    function loadConfig() {
+      const config = JSON.parse(localStorage.getItem(CONFIG_KEY) || '{}');
+      el('supabaseUrl').value = config.url || '';
+      el('supabaseKey').value = config.key || '';
+      if (config.url && config.key) {
+        state.supabase = createClient(config.url, config.key);
+        state.connected = true;
+        state.supabase.auth.getSession().then(({ data }) => {
+          state.session = data.session;
+          updateNotice();
+        });
+        state.supabase.auth.onAuthStateChange((_event, session) => {
+          state.session = session;
+          updateNotice();
+          loadAndRender();
+        });
+      }
+      updateNotice();
+    }
+
+    async function loadData() {
+      if (state.supabase && state.session) {
+        const { data, error } = await state.supabase
+          .from('crm_companies')
+          .select('*')
+          .order('next_action_date', { ascending: true, nullsFirst: false });
+        if (error) {
+          setNotice('Supabaseから読み込めませんでした。SQL実行とRLS設定を確認してください。');
+          loadDemoData();
+          return;
+        }
+        state.companies = data || [];
+        await loadActivities();
+        return;
+      }
+      loadDemoData();
+    }
+
+    async function loadActivities() {
+      if (!state.supabase || !state.session) return;
+      const { data } = await state.supabase
+        .from('crm_activities')
+        .select('*')
+        .order('activity_date', { ascending: false });
+      state.activities = data || [];
+    }
+
+    function loadDemoData() {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      state.companies = saved?.companies || sampleCompanies;
+      state.activities = saved?.activities || [];
+    }
+
+    async function loadAndRender() {
+      await loadData();
+      render();
+    }
+
+    async function saveCompany(event) {
+      event.preventDefault();
+      const payload = readForm();
+      if (!payload.company_name) return;
+
+      if (state.supabase && state.session) {
+        const query = state.selectedId
+          ? state.supabase.from('crm_companies').update(payload).eq('id', state.selectedId).select().single()
+          : state.supabase.from('crm_companies').insert(payload).select().single();
+        const { data, error } = await query;
+        if (error) {
+          setNotice('保存できませんでした。ログイン状態とRLSを確認してください。');
+          return;
+        }
+        state.selectedId = data.id;
+        await loadAndRender();
+        return;
+      }
+
+      if (state.selectedId) {
+        state.companies = state.companies.map((company) => company.id === state.selectedId ? { ...company, ...payload } : company);
+      } else {
+        const company = { ...payload, id: crypto.randomUUID() };
+        state.companies.unshift(company);
+        state.selectedId = company.id;
+      }
+      persistDemo();
+      render();
+    }
+
+    async function saveActivity(event) {
+      event.preventDefault();
+      if (!state.selectedId) {
+        setNotice('先に顧客を選んでください。');
+        return;
+      }
+      const payload = {
+        company_id: state.selectedId,
+        activity_date: el('activityDate').value || today,
+        activity_type: el('activityType').value,
+        summary: el('activitySummary').value.trim(),
+        owner_name: currentCompany()?.daiei_owner || ''
+      };
+      if (!payload.summary) return;
+
+      if (state.supabase && state.session) {
+        const { error } = await state.supabase.from('crm_activities').insert(payload);
+        if (error) {
+          setNotice('活動メモを保存できませんでした。');
+          return;
+        }
+        el('activitySummary').value = '';
+        await loadAndRender();
+        return;
+      }
+      state.activities.unshift({ ...payload, id: crypto.randomUUID() });
+      el('activitySummary').value = '';
+      persistDemo();
+      renderActivities();
+    }
+
+    function readForm() {
+      return {
+        company_name: fields.company_name.value.trim(),
+        industry: fields.industry.value.trim() || '未分類',
+        area: fields.area.value.trim() || '未設定',
+        pain: fields.pain.value.trim(),
+        support_type: fields.support_type.value,
+        stage: fields.stage.value,
+        priority: fields.priority.value,
+        daiei_owner: fields.daiei_owner.value.trim(),
+        creasta_owner: fields.creasta_owner.value.trim(),
+        next_action: fields.next_action.value.trim(),
+        next_action_date: fields.next_action_date.value || null,
+        estimated_amount: Number(fields.estimated_amount.value || 0),
+        monthly_amount: Number(fields.monthly_amount.value || 0),
+        memo: fields.memo.value.trim()
+      };
+    }
+
+    function render() {
+      renderMetrics();
+      renderRows();
+      renderActivities();
+      updateNotice();
+    }
+
+    function filteredCompanies() {
+      const q = el('searchInput').value.trim().toLowerCase();
+      return state.companies.filter((company) => {
+        const text = [
+          company.company_name, company.industry, company.area, company.pain,
+          company.daiei_owner, company.creasta_owner, company.next_action, company.memo
+        ].join(' ').toLowerCase();
+        return (!q || text.includes(q))
+          && (!el('stageFilter').value || company.stage === el('stageFilter').value)
+          && (!el('typeFilter').value || company.support_type === el('typeFilter').value)
+          && (!el('priorityFilter').value || company.priority === el('priorityFilter').value);
+      });
+    }
+
+    function renderRows() {
+      const rows = filteredCompanies();
+      el('resultCount').textContent = `${rows.length}件`;
+      el('companyRows').innerHTML = rows.length ? rows.map((company) => `
+        <tr>
+          <td class="company-cell">
+            <strong>${escapeHtml(company.company_name)}</strong>
+            <span>${escapeHtml(company.industry)} / ${escapeHtml(company.area)} / 優先度${escapeHtml(company.priority)}</span>
+          </td>
+          <td>${tag(company.support_type, typeColor(company.support_type))}</td>
+          <td>${tag(company.stage, stageColor(company.stage))}</td>
+          <td>
+            <strong>${escapeHtml(company.next_action || '未設定')}</strong>
+            <div style="color:var(--muted);font-size:12px;">${company.next_action_date || '日付未設定'}</div>
+          </td>
+          <td>
+            <div>大栄：${escapeHtml(company.daiei_owner || '未設定')}</div>
+            <div style="color:var(--muted);font-size:12px;">クリエスタ：${escapeHtml(company.creasta_owner || '未設定')}</div>
+          </td>
+          <td>
+            <div class="row-actions">
+              <button class="icon-btn" type="button" data-edit="${company.id}">編集</button>
+              <button class="icon-btn" type="button" data-delete="${company.id}">削除</button>
+            </div>
+          </td>
+        </tr>
+      `).join('') : `<tr><td colspan="6"><div class="empty">条件に合う顧客がありません。</div></td></tr>`;
+
+      document.querySelectorAll('[data-edit]').forEach((button) => {
+        button.addEventListener('click', () => editCompany(button.dataset.edit));
+      });
+      document.querySelectorAll('[data-delete]').forEach((button) => {
+        button.addEventListener('click', () => deleteCompany(button.dataset.delete));
+      });
+    }
+
+    function renderMetrics() {
+      el('metricCompanies').textContent = state.companies.length;
+      el('metricProposal').textContent = state.companies.filter((c) => ['提案準備', '提案済み'].includes(c.stage)).length;
+      el('metricSupport').textContent = state.companies.filter((c) => c.support_type === '伴走支援').length;
+      el('metricNext').textContent = state.companies.filter((c) => c.next_action_date).length;
+    }
+
+    function renderActivities() {
+      const company = currentCompany();
+      const list = state.activities.filter((activity) => activity.company_id === state.selectedId);
+      el('activityList').innerHTML = company
+        ? (list.length ? list.map((activity) => `
+          <div class="activity">
+            <b>${escapeHtml(activity.summary)}</b>
+            <span>${activity.activity_date || ''} / ${escapeHtml(activity.activity_type || 'メモ')} / ${escapeHtml(activity.owner_name || '')}</span>
+          </div>
+        `).join('') : '<div class="empty">活動メモはまだありません。</div>')
+        : '<div class="empty">顧客を選ぶと活動メモを追加できます。</div>';
+    }
+
+    function editCompany(id) {
+      const company = state.companies.find((item) => item.id === id);
+      if (!company) return;
+      state.selectedId = id;
+      fields.id.value = id;
+      Object.entries(fields).forEach(([key, field]) => {
+        if (key === 'id') return;
+        field.value = company[key] ?? '';
+      });
+      el('formTitle').textContent = '顧客を編集';
+      renderActivities();
+    }
+
+    async function deleteCompany(id) {
+      const company = state.companies.find((item) => item.id === id);
+      if (!company || !confirm(`${company.company_name} を削除しますか？`)) return;
+
+      if (state.supabase && state.session) {
+        const { error } = await state.supabase.from('crm_companies').delete().eq('id', id);
+        if (error) {
+          setNotice('削除できませんでした。');
+          return;
+        }
+        clearForm();
+        await loadAndRender();
+        return;
+      }
+      state.companies = state.companies.filter((item) => item.id !== id);
+      state.activities = state.activities.filter((item) => item.company_id !== id);
+      clearForm();
+      persistDemo();
+      render();
+    }
+
+    function clearForm() {
+      state.selectedId = '';
+      el('companyForm').reset();
+      fields.priority.value = '中';
+      fields.estimated_amount.value = 0;
+      fields.monthly_amount.value = 0;
+      el('formTitle').textContent = '新規登録';
+      renderActivities();
+    }
+
+    function currentCompany() {
+      return state.companies.find((company) => company.id === state.selectedId);
+    }
+
+    function persistDemo() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        companies: state.companies,
+        activities: state.activities
+      }));
+    }
+
+    function openSetup() {
+      el('setupModal').classList.add('open');
+    }
+
+    function closeSetup() {
+      el('setupModal').classList.remove('open');
+    }
+
+    function saveConfig() {
+      const config = {
+        url: el('supabaseUrl').value.trim(),
+        key: el('supabaseKey').value.trim()
+      };
+      localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+      location.reload();
+    }
+
+    function resetConfig() {
+      localStorage.removeItem(CONFIG_KEY);
+      location.reload();
+    }
+
+    async function sendMagicLink() {
+      if (!state.supabase) {
+        setNotice('先にProject URLとkeyを保存してください。');
+        return;
+      }
+      const email = el('loginEmail').value.trim();
+      if (!email) {
+        setNotice('ログインメールを入力してください。');
+        return;
+      }
+      const { error } = await state.supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: location.href }
+      });
+      setNotice(error ? 'ログインメールを送れませんでした。' : 'ログインメールを送信しました。');
+    }
+
+    function updateNotice() {
+      if (state.connected && state.session) {
+        setNotice(`Supabase接続中：${state.session.user.email || 'ログイン済み'}`);
+      } else if (state.connected) {
+        setNotice('Supabase設定済み。ログインメールを送信してください。');
+      } else {
+        setNotice('デモモード：Supabase未接続でもローカル保存で試せます。');
+      }
+    }
+
+    function setNotice(message) {
+      el('notice').querySelector('span').innerHTML = `<b>${escapeHtml(message)}</b>`;
+    }
+
+    function tag(text, color) {
+      return `<span class="tag ${color}">${escapeHtml(text || '未設定')}</span>`;
+    }
+
+    function typeColor(type) {
+      if (type === '伴走支援') return 'green';
+      if (type === 'システム構築' || type === 'スポット開発') return 'blue';
+      if (type === 'Google Workspace導入') return 'amber';
+      return '';
+    }
+
+    function stageColor(stage) {
+      if (stage === '受注') return 'green';
+      if (stage === '提案準備' || stage === '提案済み') return 'blue';
+      if (stage === '保留') return 'amber';
+      if (stage === '失注') return 'red';
+      return '';
+    }
+
+    function addDays(days) {
+      const date = new Date();
+      date.setDate(date.getDate() + days);
+      return date.toISOString().slice(0, 10);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      }[char]));
+    }
+  </script>
+</body>
+</html>

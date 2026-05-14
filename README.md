@@ -13,3 +13,22 @@
 ## 開き方
 
 `index.html` を開くとデモ画面に遷移します。
+
+## 大栄電通様 営業支援CRM
+
+`daiei-crm.html` を開くと、顧客管理・営業支援ツールを確認できます。
+
+管理できる内容:
+
+- 営業先企業、業種、エリア、課題
+- 伴走支援、システム構築、Google Workspace導入、スポット開発の分類
+- 大栄電通側担当者、クリエスタ側担当者
+- 商談状態、次回対応、見込金額、活動メモ
+
+Supabaseで本運用する場合:
+
+1. Supabaseで新規プロジェクトを作成
+2. `supabase/crm_schema.sql` をSQL Editorで実行
+3. Authenticationでメールログインを有効化
+4. `daiei-crm.html` の「接続設定」にProject URLとanon / publishable keyを入力
+5. VercelにこのGitHubリポジトリをデプロイ
